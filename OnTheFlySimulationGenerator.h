@@ -11,6 +11,7 @@
 #include <TString.h>
 #include <PythiaProcesses.h>
 #include <AliDecayer.h>
+#include <THistManager.h>
 
 class AliAnalysisTaskSE;
 class AliAnalysisManager;
@@ -124,6 +125,7 @@ protected:
   EGenerator_t         fHadronization    ;
   EGenerator_t         fDecayer          ;
   Bool_t               fExtendedEventInfo;
+  THistManager         fHistManager               ; ///<  Histogram manager
   std::vector<std::string>
                        fDebugClassNames  ;
 

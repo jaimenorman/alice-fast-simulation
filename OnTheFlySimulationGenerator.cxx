@@ -32,6 +32,7 @@
 #include "AliPythia8_dev.h"
 #include "AliGenReaderHepMC_dev.h"
 
+#include "AliAnalysisTaskCharmHadronJets.h"
 #include "OnTheFlySimulationGenerator.h"
 
 //______________________________________________________________________________
@@ -60,6 +61,7 @@ OnTheFlySimulationGenerator::OnTheFlySimulationGenerator() :
   fHadronization(kPythia6),
   fDecayer(kPythia6),
   fExtendedEventInfo(kFALSE),
+  fHistManager(),
   fDebugClassNames({"AliGenPythia_dev", "AliPythia6_dev", "AliPythia8_dev", 
   "AliGenEvtGen_dev", "AliGenExtFile_dev", "AliGenReaderHepMC_dev", "THepMCParser_dev",
   "AliMCGenHandler", 
@@ -95,6 +97,7 @@ OnTheFlySimulationGenerator::OnTheFlySimulationGenerator(TString taskname) :
   fHadronization(kPythia6),
   fDecayer(kPythia6),
   fExtendedEventInfo(kFALSE),
+  fHistManager(),
   fDebugClassNames({"AliGenPythia_dev", "AliPythia6_dev", "AliPythia8_dev", 
   "AliGenEvtGen_dev", "AliGenExtFile_dev", "AliGenReaderHepMC_dev", "THepMCParser_dev",
   "AliMCGenHandler", 
@@ -290,6 +293,27 @@ void OnTheFlySimulationGenerator::AddDJet(const char* file_name)
   eng = pDMesonJetsTask->AddAnalysisEngine(AliAnalysisTaskDmesonJets::kDstartoKpipi, "", "", AliAnalysisTaskDmesonJets::kMCTruth, AliJetContainer::kFullJet, 0.4);
   eng->SetAcceptedDecayMap(AliAnalysisTaskDmesonJets::EMesonDecayChannel_t::kAnyDecay);
   eng->SetRejectedOriginMap(rejectOrigin);
+
+
+
+  AliAnalysisTaskCharmHadronJets* pCharmHadronJetsTask = AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets("usedefault", AliJetContainer::kChargedJet, AliJetContainer::antikt_algorithm, AliJetContainer::pt_scheme,0.4, 2);
+  pCharmHadronJetsTask->SetVzRange(-999,999);
+  pCharmHadronJetsTask->SetPtHardRange(fMinPtHard, fMaxPtHard);
+  if (fMinPtHard > -1 && fMaxPtHard > fMinPtHard) pCharmHadronJetsTask->SetMCFilter();
+  pCharmHadronJetsTask->SetJetPtFactor(4);
+  pCharmHadronJetsTask->SetIsPythia(kTRUE);
+  pCharmHadronJetsTask->SetNeedEmcalGeom(kFALSE);
+  pCharmHadronJetsTask->SetForceBeamType(AliAnalysisTaskEmcalJetLight::kpp);
+  pCharmHadronJetsTask->SetCentralityEstimation(AliAnalysisTaskEmcalJetLight::kNoCentrality);
+//  if (fExtendedEventInfo) {
+//    pCharmHadronJetsTask->SetOutputType(AliAnalysisTaskCharmHadronJets::kTreeExtendedOutput);
+//  }
+//  else {
+//    pCharmHadronJetsTask->SetOutputType(AliAnalysisTaskCharmHadronJets::kTreeOutput);
+//  }
+  pCharmHadronJetsTask->SetApplyKinematicCuts(kTRUE);
+  pCharmHadronJetsTask->SetRejectISR(fRejectISR);
+
 
   if (!fname.IsNull()) {
     AliAnalysisManager::SetCommonFileName(old_file_name);
