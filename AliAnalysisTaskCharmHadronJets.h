@@ -94,6 +94,8 @@ class AliAnalysisTaskCharmHadronJets : public AliAnalysisTaskEmcalJetLight
   void SetJetRecoScheme(ERecoScheme_t recoScheme) { fJetRecoScheme = recoScheme;}
   void SetJetR(Double_t jetR ) { fJetR = jetR;} 
 
+  void SetCandidatePDG(UInt_t pdg) {fCandidatePDG = pdg;}
+
   virtual void         UserCreateOutputObjects();
   virtual void         ExecOnce();
   virtual Bool_t       Run();

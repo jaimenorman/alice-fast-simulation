@@ -74,8 +74,8 @@ AliAnalysisTaskCharmHadronJets::AliAnalysisTaskCharmHadronJets() :
   fJetGhostArea(0.005),
   fJetType(AliJetContainer::kChargedJet),
   fJetAlgo (AliJetContainer::antikt_algorithm),
-  fJetRecoScheme(AliJetContainer::pt_scheme), 
-  fJetR(0.4), 
+  fJetRecoScheme(AliJetContainer::pt_scheme),
+  fJetR(0.4),
   fMCContainer(0),
   fAodEvent(0),
   fFastJetWrapper(0)
@@ -97,8 +97,8 @@ AliAnalysisTaskCharmHadronJets::AliAnalysisTaskCharmHadronJets(const char* name,
   fJetGhostArea(0.005),
   fJetType(AliJetContainer::kChargedJet),
   fJetAlgo (AliJetContainer::antikt_algorithm),
-  fJetRecoScheme(AliJetContainer::pt_scheme), 
-  fJetR(0.4), 
+  fJetRecoScheme(AliJetContainer::pt_scheme),
+  fJetR(0.4),
   fMCContainer(0),
   fAodEvent(0),
   fFastJetWrapper(0)
@@ -128,6 +128,7 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   TString hname;
   TString htitle;
+
 
   hname = "fHistCharmPt";
   htitle = hname + ";#it{p}_{T,charm} (GeV/#it{c});counts";
@@ -168,6 +169,55 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   hname = "fhParticles_pt";
   htitle = hname + ";p_{T} (GeV/c);counts";
   fHistManager.CreateTH1(hname, htitle, 100, 0, 20);
+
+
+  hname = "fHistConstJet_DR";
+  htitle = hname + ";#Delta R;counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.0);
+
+  hname = "fHistConstJet_Z";
+  htitle = hname + ";Z_{const.-jet};counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.5);
+
+  hname = "fHistConstJet_ptConst_ptJet";
+  htitle = hname + ";p_{T,const,};p_{T,jet};counts";
+  fHistManager.CreateTH2(hname, htitle, 60, 0, 30, 60, 0, 30 );
+
+  hname = "fHistConstJet_ptConst_ptJet_Z";
+  htitle = hname + ";p_{T,const,};p_{T,jet};Z_{const.-jet}";
+  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+
+  hname = "fHistConstJet_ptConst_ptJet_DR";
+  htitle = hname + ";p_{T,const,};p_{T,jet};#Delta R_{const.-jet}";
+  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+
+  hname = "fHistDJet_Z";
+  htitle = hname + ";Z_{D-jet} ;counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.5);
+
+  hname = "fHistDJet_DR";
+  htitle = hname + ";#Delta R;counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.0);
+
+  hname = "fHistDJet_ptD_ptJet";
+  htitle = hname + ";p_{T,const,};p_{T,jet};counts";
+  fHistManager.CreateTH2(hname, htitle, 60, 0, 30, 60, 0, 30 );
+
+  hname = "fHistDJet_ptD_ptJet_Z";
+  htitle = hname + ";p_{T,const,};p_{T,jet};Z_{const.-jet}";
+  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+
+  hname = "fHistDJet_ptD_ptJet_DR";
+  htitle = hname + ";p_{T,const,};p_{T,jet};#Delta R_{const.-jet}";
+  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+
+  hname = "fHistNConstInJet";
+  htitle = hname + ";N_{const.};counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0.5, 50.5);
+
+  hname = "fHistNConstInDJet";
+  htitle = hname + ";N_{const.};counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0.5, 50.5);
 
   // TO DO - set other histograms
 
@@ -250,7 +300,7 @@ void AliAnalysisTaskCharmHadronJets::AddInputVectors(AliEmcalContainer* cont, In
 ///
 /// Our main particle level analysis
 ///
-/// 
+///
 
 void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
 {
@@ -297,11 +347,10 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
   auto itpart = fMCContainer->all_momentum();
   for(auto part : itpart) {
     // part is a type pair <AliTLorentzVector, AliAODMCParticle *>
-    // where the first and second element can be accessed by 
+    // where the first and second element can be accessed by
     // part.first and part.second
     fHistManager.FillTH1("fhParticles_pt", part.second->Pt());
     UInt_t pdg = part.second->PdgCode();
-
   }
 
   //
@@ -311,8 +360,45 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
   for (auto jet : jets_incl) {
     Double_t ptJet = TMath::Sqrt(jet.px()*jet.px() + jet.py()*jet.py());
     Printf("jet pt = %f",ptJet);
-  }
 
+    Int_t nDmesonsInJet = 0;
+    Int_t nConstsInJet = 0;
+
+    for (auto constituent : jet.constituents()) {
+      Int_t iPart = constituent.user_index() - 100;
+      if (constituent.perp() < 1e-6) continue; // reject ghost particles
+      AliAODMCParticle* part = fMCContainer->GetMCParticle(iPart);
+      if (!part) {
+        ::Error("AliAnalysisTaskDmesonJets::AnalysisEngine::RunParticleLevelAnalysis", "Could not find jet constituent %d!", iPart);
+        continue;
+      }
+      nConstsInJet++;
+      Printf("jet constituent - pdg = %i",part->PdgCode());
+      Double_t ptConstJet = part->Pt();
+      Double_t dEta = (part->Eta() - jet.eta());
+      Double_t dPhi = (part->Phi() - jet.phi());
+      Double_t dR = TMath::Sqrt(dEta*dEta + dPhi*dPhi);
+      TVector3 pConstvec = TVector3(part->Px(),part->Py(),part->Pz());
+      TVector3 pjetvec = TVector3(jet.px(),jet.py(),jet.pz());
+      Double_t zConstJet = pjetvec.Dot(pConstvec) / pjetvec.Dot(pjetvec);
+      fHistManager.FillTH1("fHistConstJet_DR", dR);
+      fHistManager.FillTH1("fHistConstJet_Z", zConstJet);
+      fHistManager.FillTH2("fHistConstJet_ptConst_ptJet", ptConstJet, ptJet);
+      fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_DR", ptConstJet, ptJet, dR);
+      fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_Z", ptConstJet, ptJet, zConstJet);
+
+      if (TMath::Abs(part->PdgCode()) == 421) {
+        nDmesonsInJet++;
+        fHistManager.FillTH1("fHistDJet_DR", dR);
+        fHistManager.FillTH1("fHistDJet_Z", zConstJet);
+        fHistManager.FillTH2("fHistDJet_ptD_ptJet", ptConstJet, ptJet);
+        fHistManager.FillTH3("fHistDJet_ptD_ptJet_DR", ptConstJet, ptJet, dR);
+        fHistManager.FillTH3("fHistDJet_ptD_ptJet_Z", ptConstJet, ptJet, zConstJet);
+      }
+    }
+    fHistManager.FillTH1("fHistNConstInJet", nConstsInJet);
+    if(nDmesonsInJet>0) fHistManager.FillTH1("fHistNConstInDJet", nConstsInJet);
+  }
 }
 
 
@@ -443,12 +529,12 @@ void AliAnalysisTaskCharmHadronJets::FillPartonLevelHistograms()
 /// \param nMaxTrees number of output trees
 /// \param suffix additional suffix that can be added at the end of the task name
 /// \return pointer to the new AliAnalysisTaskCharmHadronJets task
-AliAnalysisTaskCharmHadronJets* AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets(TString nMCpart, 
+AliAnalysisTaskCharmHadronJets* AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets(TString nMCpart,
     AliJetContainer::EJetType_t jetType,
     AliJetContainer::EJetAlgo_t jetAlgo,
     AliJetContainer::ERecoScheme_t recoScheme,
     Double_t jetR,
-    Int_t nMaxTrees, 
+    Int_t nMaxTrees,
     TString suffix)
 {
 
@@ -499,8 +585,8 @@ AliAnalysisTaskCharmHadronJets* AliAnalysisTaskCharmHadronJets::AddTaskCharmHadr
 //    AliJetContainer* jetContBase = jetTask->AddJetContainer(jetType, jetAlgo, recoScheme, jetR, acceptance, partCont, 0x0 );
     AliJetContainer* jetContBase = new AliJetContainer(nameJet);
     //UInt_t accType, std::string partContName, std::string clusContName, TString tag="Jet")
-    //jetContBase->SetRhoName(nRho);                     
-    jetContBase->ConnectParticleContainer(partCont);  
+    //jetContBase->SetRhoName(nRho);
+    jetContBase->ConnectParticleContainer(partCont);
     jetTask->AdoptJetContainer(jetContBase);
   }
 
