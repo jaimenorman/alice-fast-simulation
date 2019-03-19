@@ -170,6 +170,161 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   htitle = hname + ";p_{T} (GeV/c);counts";
   fHistManager.CreateTH1(hname, htitle, 100, 0, 20);
 
+  hname="fD0Pt";
+  htitle= hname + ";#it{p}_{T,D0} (GeV/#it{c});counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,12);
+
+  hname="fD0PtCut1";
+  htitle= hname + ";#it{p}_{T,D0} (GeV/#it{c});counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,12);
+
+  hname="fD0PtCut2";
+  htitle= hname + ";#it{p}_{T,D0} (GeV/#it{c});counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,12);
+
+  hname="fD0Phi";
+  htitle= hname + ";#phi_{D0};counts";
+  fHistManager.CreateTH1(hname,htitle,125,0,TMath::TwoPi());
+
+  hname="fD0Eta";
+  htitle= hname + ";#eta_{D0};counts";
+  fHistManager.CreateTH1(hname,htitle,50,-10,10);
+
+
+  hname="fLcPt";
+  htitle= hname + ";#it{p}_{T,#Lambda_{C}} (GeV/#it{c});counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,12);
+
+  hname="fLcPtCut1";
+  htitle= hname + ";#it{p}_{T,#Lambda_{C}} (GeV/#it{c});counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,12);
+
+  hname="fLcPtCut2";
+  htitle= hname + ";#it{p}_{T,#Lambda_{C}} (GeV/#it{c});counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,12);
+
+  hname="fLcPhi";
+  htitle= hname + ";#phi_{#Lambda_{C}};counts";
+  fHistManager.CreateTH1(hname,htitle,125,0,TMath::TwoPi());
+
+  hname="fLcEta";
+  htitle= hname + ";#eta_{#Lambda_{C}};counts";
+  fHistManager.CreateTH1(hname,htitle,50,-10,10);
+
+  hname = "fMotherLc_pt";
+  htitle = hname + ";p_{T,#Lambda_{C}} (GeV/c);counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 12);
+
+  hname = "fDaughterLc_pt";
+  htitle = hname + ";p_{T,#Lambda_{C}} (GeV/c);counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 12);
+
+  hname = "fMotherD0_pt";
+  htitle = hname + ";p_{T,D0} (GeV/c);counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 12);
+
+  hname = "fDaughterD0_pt";
+  htitle = hname + ";p_{T,D0} (GeV/c);counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 12);
+
+  hname = "fZ_D0";
+  htitle = hname + ";Z_{D0} ;counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 2.5);
+
+  hname = "fZ_Lc";
+  htitle = hname + ";Z_{Lc} ;counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 2.5);
+
+  hname = "fMomentZ_D0";
+  htitle = hname + ";Z_{D0} ;counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 2.5);
+
+  hname = "fMomentZ_Lc";
+  htitle = hname + ";Z_{Lc} ;counts";
+  fHistManager.CreateTH1(hname, htitle, 100, 0, 2.5);
+
+  hname = "fRKaon_Pt";
+  htitle = hname + ";R ;p_{T,D0}";
+  fHistManager.CreateTH2(hname,htitle,100,0,3,100,0,15);
+
+  hname = "ProjKaon_R_Cut0";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "ProjKaon_R_Cut1";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "ProjKaon_R_Cut2";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "ProjKaon_R_Cut3";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "fRPion_Pt";
+  htitle = hname + ";R ;p_{T,D0}";
+  fHistManager.CreateTH2(hname,htitle,100,0,3,100,0,15);
+
+  hname = "ProjPion_R_Cut0";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "ProjPion_R_Cut1";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "ProjPion_R_Cut2";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "ProjPion_R_Cut3";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "LcfRKaon_Pt";
+  htitle = hname + ";R ;p_{T,D0}";
+  fHistManager.CreateTH2(hname,htitle,100,0,3,100,0,15);
+
+  hname = "LcProjKaon_R_Cut0";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "LcProjKaon_R_Cut1";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "LcProjKaon_R_Cut2";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "LcProjKaon_R_Cut3";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "LcfRPion_Pt";
+  htitle = hname + ";R ;p_{T,D0}";
+  fHistManager.CreateTH2(hname,htitle,100,0,3,100,0,15);
+
+  hname = "LcProjPion_R_Cut0";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "LcProjPion_R_Cut1";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname ="LcProjPion_R_Cut2";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  hname = "LcProjPion_R_Cut3";
+  htitle = hname + ";R ;counts";
+  fHistManager.CreateTH1(hname,htitle,100,0,4);
+
+  // jet level histograms
+
 
   hname = "fHistConstJet_DR";
   htitle = hname + ";#Delta R;counts";
@@ -218,6 +373,7 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   hname = "fHistNConstInDJet";
   htitle = hname + ";N_{const.};counts";
   fHistManager.CreateTH1(hname, htitle, 50, 0.5, 50.5);
+
 
   // TO DO - set other histograms
 
@@ -350,8 +506,233 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
     // where the first and second element can be accessed by
     // part.first and part.second
     fHistManager.FillTH1("fhParticles_pt", part.second->Pt());
+
     UInt_t pdg = part.second->PdgCode();
-  }
+   double_t eta= part.second->Eta();
+
+   // UInt_t idmother=part.second->GetMother();
+
+
+   // AliAODMCParticle* part1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
+   // UInt_t moth=part1->GetPdgCode();
+
+    //fHistManager.FillTH1("fMother_pt", part1->Pt());
+
+
+   // UInt_t idmother=part.second->GetMother();
+   // AliAODMCParticle* part1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
+  //  UInt_t moth=part1->GetPdgCode();
+
+  //  while ( moth > 6 && moth < -6 ) {
+//	    idmother = part1->GetMother();
+//	    if (idmother<0){ break; }
+//	    part1 = fMCContainer->GetMCParticleWithLabel(idmother);
+//	    moth=part1->GetPdgCode();
+//	    printf("The PDG mother = %f \n", moth);
+  //  }
+
+    //printf("The Final PDG of quark is:  %f \n",moth);
+
+    //Condition for lambda c
+    if ( pdg == 4122 || pdg == -4122 )
+    { fHistManager.FillTH1("fLcPt",part.second->Pt());
+	    fHistManager.FillTH1("fLcPhi",part.second->Phi());
+	    fHistManager.FillTH1("fLcEta",part.second->Eta());
+	    if ( eta < 1 && eta > -1 ) {fHistManager.FillTH1("fLcPtCut1",part.second->Pt());}
+               UInt_t idmother= part.second->GetMother();
+               UInt_t moth;
+               UInt_t k = 1;
+        AliAODMCParticle* moth1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
+        fHistManager.FillTH1("fMotherLc_pt", moth1->Pt());
+
+        UInt_t iddaughter=part.second->GetFirstDaughter();
+        AliAODMCParticle* part2 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaughter);
+        UInt_t daught=part2->GetPdgCode();
+        fHistManager.FillTH1("fDaughterLc_pt", part2->Pt());
+
+        Int_t icount = 0;
+	       while (k==1) {
+           if ( idmother < 0 ) { break; }
+		       AliAODMCParticle* part1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
+           if(!part1) {break;}
+		       moth=part1->GetPdgCode();
+           idmother = part1->GetMother();
+		       printf("Lc - The PDG mother = %i \n", moth);
+		       //if ( TMath::Abs(moth) <= 6 ) //found quark
+           if (moth==-6||moth==-5||moth==-4||moth==-3||moth==-2||moth==-1||moth==0||moth==1||moth==2||moth==3||moth==4||moth==5||moth==6)
+           {
+             if ( moth != 5 && moth != -5 ) { fHistManager.FillTH1("fLcPtCut2",part.second->Pt()); }
+
+             if ( moth == 4 || moth == -4) {
+             fHistManager.FillTH1("fZ_Lc",part.second->Pt()/part1->Pt());
+             Double_t pcharm = part1->P();
+             Double_t pLc =part.second->P();
+             Double_t ZLc = pLc / pcharm ;
+             printf(" The fragmentation function is ZLc = %f \n",ZLc);
+             //fHistManager.FillTH1("fMomentZ_Lc",TMath::Sqrt(part.first.Px()*part.first.Px()+part.first.Py()*part.first.Py()+part.first.Pz()*part.first.Pz())/TMath::Sqrt(part1->Px()*part1->Px()+part1->Py()*part1->Py()+part1->Pz()*part1->Pz()));
+             fHistManager.FillTH1("fMomentZ_Lc",ZLc);}
+
+
+             break;
+           }
+           if ( moth == 2212 ) break; //found proton!
+
+
+           icount++;
+           if(icount>10) break;
+	       }
+         printf("reached end of Lc mother loop");
+         //Daughter
+         UInt_t Ndaught = part.second->GetNDaughters();
+        // if we want all the N daughters.
+         for (Int_t j = 0; j <= Ndaught; j++){
+           UInt_t iddaught = part.second->GetDaughter(j);
+           AliAODMCParticle* daught1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaught);
+           UInt_t Pdgdaught1= daught1->GetPdgCode();
+           printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
+
+           // if Kaon daughter is detected:
+              if (Pdgdaught1==311||Pdgdaught1==313||Pdgdaught1==321||Pdgdaught1==323||Pdgdaught1==-311||Pdgdaught1==-313||Pdgdaught1==-321||Pdgdaught1==-323)
+           {
+             double_t DEta = daught1->Eta();
+             double_t DPhi = daught1->Phi();
+             double_t DPt = daught1->Pt();
+             double_t rD0 = TMath::Sqrt((DEta-part.second->Eta())*(DEta-part.second->Eta())+(DPhi-part.second->Phi())*(DPhi-part.second->Phi()));
+             fHistManager.FillTH2("LcfRKaon_Pt",rD0,part.second->Pt());
+
+             Double_t D0Pt = part.second->Pt();
+
+               if (D0Pt<3 && D0Pt>0) { fHistManager.FillTH1("LcProjKaon_R_Cut1",rD0); }
+               if (D0Pt<7 && D0Pt>3) { fHistManager.FillTH1("LcProjKaon_R_Cut2",rD0); }
+               if (D0Pt<12 && D0Pt>7) { fHistManager.FillTH1("LcProjKaon_R_Cut3",rD0); }
+               if (D0Pt<12 && D0Pt>0) { fHistManager.FillTH1("LcProjKaon_R_Cut0",rD0);}
+
+           }
+           // If PION detected
+           if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
+           {
+             double_t DEta = daught1->Eta();
+             double_t DPhi = daught1->Phi();
+             double_t DPt = daught1->Pt();
+             double_t rD0 = TMath::Sqrt((DEta-part.second->Eta())*(DEta-part.second->Eta())+(DPhi-part.second->Phi())*(DPhi-part.second->Phi()));
+             fHistManager.FillTH2("LcfRPion_Pt",rD0,part.second->Pt());
+
+             Double_t D0Pt = part.second->Pt();
+
+               if (D0Pt<3 && D0Pt>0) { fHistManager.FillTH1("LcProjPion_R_Cut1",rD0); }
+               if (D0Pt<7 && D0Pt>3) { fHistManager.FillTH1("LcProjPion_R_Cut2",rD0); }
+               if (D0Pt<12 && D0Pt>7) { fHistManager.FillTH1("LcProjPion_R_Cut3",rD0); }
+               if (D0Pt<12 && D0Pt>0) { fHistManager.FillTH1("LcProjPion_R_Cut0",rD0);}
+           }
+
+         }
+
+    }
+
+
+    //Condition for D0
+   if ( pdg == 421 || pdg == -421)
+   { fHistManager.FillTH1("fD0Pt",part.second->Pt());
+     fHistManager.FillTH1("fD0Phi",part.second->Phi());
+     fHistManager.FillTH1("fD0Eta",part.second->Eta());
+         if ( eta < 1 && eta > -1 ) {fHistManager.FillTH1("fD0PtCut1",part.second->Pt());}
+	 UInt_t idmother= part.second->GetMother();
+	 UInt_t moth;
+	 UInt_t k=1;
+
+   AliAODMCParticle* moth1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
+   fHistManager.FillTH1("fMotherD0_pt", moth1->Pt());
+
+   UInt_t iddaughter=part.second->GetFirstDaughter();
+   AliAODMCParticle* part2 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaughter);
+   UInt_t daught=part2->GetPdgCode();
+   fHistManager.FillTH1("fDaughterD0_pt", part2->Pt());
+
+   Int_t icount = 0;
+
+	 while (k==1) {
+     if ( idmother < 0 ) { break; }
+		 AliAODMCParticle* part1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
+     if (!part1) {break;}
+     moth=part1->GetPdgCode();
+     printf("The Mother Pdg = %i \n", moth);
+
+     if (moth==-6||moth==-5||moth==-4||moth==-3||moth==-2||moth==-1||moth==0||moth==1||moth==2||moth==3||moth==4||moth==5||moth==6)
+     { //printf("INSIDE THE LOOOOOOOOOOP1 \n ");
+       if ( moth != 5 && moth != -5 ) { fHistManager.FillTH1("fD0PtCut2",part.second->Pt()); }
+       if ( moth == 4 || moth == -4)
+       { //Double_t pcharm = part1->P();
+         Double_t pcharm= TMath::Sqrt(part1->Px()*part1->Px()+part1->Py()*part1->Py()+part1->Pz()*part1->Pz());
+         //Double_t pD0 =part.second->P();
+         Double_t pD0 = TMath::Sqrt(part.first.Px()*part.first.Px()+part.first.Py()*part.first.Py()+part.first.Pz()*part.first.Pz());
+         Double_t zD0 = pD0 / pcharm ;
+         printf(" The fragmentation function is zD0 =   %f for %i = %f and %i = %f \n",zD0,moth,pcharm,pdg,pD0);
+         fHistManager.FillTH1("fMomentZ_D0",zD0);
+       //fHistManager.FillTH1("fMomentZ_D0",TMath::Sqrt(part.first.Px()*part.first.Px()+part.first.Py()*part.first.Py()+part.first.Pz()*part.first.Pz())/TMath::Sqrt(part1->Px()*part1->Px()+part1->Py()*part1->Py()+part1->Pz()*part1->Pz()));
+       fHistManager.FillTH1("fZ_D0",part.second->Pt()/part1->Pt());}
+       break; }
+
+     if ( moth == 2212 ) {break;}
+
+		 idmother = part1->GetMother();
+		 printf("D0 - The PDG mother = %i \n", moth);
+
+		 //if ( idmother < 0 ) { break; }
+     icount++;
+     if(icount>10) {break;}
+	 }
+
+   printf("reached end of D0 mother loop");
+
+   //Daughter
+   UInt_t Ndaught = part.second->GetNDaughters();
+// if we want all the N daughters.
+   for (Int_t j = 0; j <= Ndaught; j++){
+
+     UInt_t iddaught = part.second->GetDaughter(j);
+     AliAODMCParticle* daught1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaught);
+     UInt_t Pdgdaught1= daught1->GetPdgCode();
+    // printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
+
+// if Kaon daughter is detected:
+   if (Pdgdaught1==311||Pdgdaught1==313||Pdgdaught1==321||Pdgdaught1==323||Pdgdaught1==-311||Pdgdaught1==-313||Pdgdaught1==-321||Pdgdaught1==-323)
+{
+  double_t DEta = daught1->Eta();
+  double_t DPhi = daught1->Phi();
+  double_t DPt = daught1->Pt();
+  double_t rD0 = TMath::Sqrt((DEta-part.second->Eta())*(DEta-part.second->Eta())+(DPhi-part.second->Phi())*(DPhi-part.second->Phi()));
+  fHistManager.FillTH2("fRKaon_Pt",rD0,part.second->Pt());
+
+  Double_t D0Pt = part.second->Pt();
+
+    if (D0Pt<3 && D0Pt>0) { fHistManager.FillTH1("ProjKaon_R_Cut1",rD0); }
+    if (D0Pt<7 && D0Pt>3) { fHistManager.FillTH1("ProjKaon_R_Cut2",rD0); }
+    if (D0Pt<12 && D0Pt>7) { fHistManager.FillTH1("ProjKaon_R_Cut3",rD0); }
+    if (D0Pt<12 && D0Pt>0) { fHistManager.FillTH1("ProjKaon_R_Cut0",rD0);}
+
+}
+// If pion detected
+if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
+{
+  double_t DEta = daught1->Eta();
+  double_t DPhi = daught1->Phi();
+  double_t DPt = daught1->Pt();
+  double_t rD0 = TMath::Sqrt((DEta-part.second->Eta())*(DEta-part.second->Eta())+(DPhi-part.second->Phi())*(DPhi-part.second->Phi()));
+  fHistManager.FillTH2("fRPion_Pt",rD0,part.second->Pt());
+
+  Double_t D0Pt = part.second->Pt();
+
+    if (D0Pt<3 && D0Pt>0) { fHistManager.FillTH1("ProjPion_R_Cut1",rD0); }
+    if (D0Pt<7 && D0Pt>3) { fHistManager.FillTH1("ProjPion_R_Cut2",rD0); }
+    if (D0Pt<12 && D0Pt>7) { fHistManager.FillTH1("ProjPion_R_Cut3",rD0); }
+    if (D0Pt<12 && D0Pt>0) { fHistManager.FillTH1("ProjPion_R_Cut0",rD0);}
+}
+
+   }
+
+
+ } }
+
 
   //
   // Jet loop - loop over all reconstructed jets
@@ -360,6 +741,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
   for (auto jet : jets_incl) {
     Double_t ptJet = TMath::Sqrt(jet.px()*jet.px() + jet.py()*jet.py());
     Printf("jet pt = %f",ptJet);
+    //Printf("jet pt = %f",ptJet);
 
     Int_t nDmesonsInJet = 0;
     Int_t nConstsInJet = 0;
