@@ -325,7 +325,6 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   // jet level histograms
 
-
   hname = "fHistConstJet_DR";
   htitle = hname + ";#Delta R;counts";
   fHistManager.CreateTH1(hname, htitle, 50, 0, 1.0);
@@ -373,6 +372,24 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   hname = "fHistNConstInDJet";
   htitle = hname + ";N_{const.};counts";
   fHistManager.CreateTH1(hname, htitle, 50, 0.5, 50.5);
+
+
+  hname = "fHistPtJet";
+  htitle = hname + ";p_{T,Jet} (GeV/c) ;counts";
+  fHistManager.CreateTH1(hname,htitle,99,1,100);
+
+  hname = "fHistPhiJet";
+  htitle = hname + ";#phi_{Jet} ;counts ";
+  fHistManager.CreateTH1(hname,htitle,125,0,TMath::TwoPi());
+
+  hname = "fHistEtaJet";
+  htitle = hname +";#eta_{Jet} ;counts ";
+  fHistManager.CreateTH1(hname,htitle,50,-10,10);
+
+  hname = "fHistJetPt_D0";
+  htitle = hname + ";p_{T,D0Jet} (GeV/c) ;counts";
+  fHistManager.CreateTH1(hname,htitle,99,1,100);
+
 
 
   // TO DO - set other histograms
@@ -737,11 +754,15 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
   //
   // Jet loop - loop over all reconstructed jets
   //
+
   std::vector<fastjet::PseudoJet> jets_incl = fFastJetWrapper->GetInclusiveJets();
   for (auto jet : jets_incl) {
     Double_t ptJet = TMath::Sqrt(jet.px()*jet.px() + jet.py()*jet.py());
     Printf("jet pt = %f",ptJet);
-    //Printf("jet pt = %f",ptJet);
+
+    fHistManager.FillTH1("fHistPtJet",ptJet);
+    fHistManager.FillTH1("fHistEtaJet",jet.pseudorapidity());
+    fHistManager.FillTH1("fHistPhiJet",jet.phi());
 
     Int_t nDmesonsInJet = 0;
     Int_t nConstsInJet = 0;
@@ -768,7 +789,7 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
       fHistManager.FillTH2("fHistConstJet_ptConst_ptJet", ptConstJet, ptJet);
       fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_DR", ptConstJet, ptJet, dR);
       fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_Z", ptConstJet, ptJet, zConstJet);
-
+//The special PDG candidate . (With MinimumBias pythia )
       if (TMath::Abs(part->PdgCode()) == 421) {
         nDmesonsInJet++;
         fHistManager.FillTH1("fHistDJet_DR", dR);
@@ -779,8 +800,15 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
       }
     }
     fHistManager.FillTH1("fHistNConstInJet", nConstsInJet);
-    if(nDmesonsInJet>0) fHistManager.FillTH1("fHistNConstInDJet", nConstsInJet);
+
+    if(nDmesonsInJet>0) fHistManager.FillTH1("fHistNConstInDJet", nConstsInJet);    //
+    if(nDmesonsInJet>0) fHistManager.FillTH1("fHistJetPt_D0",ptJet);
+
+
   }
+
+
+
 }
 
 
