@@ -308,10 +308,10 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
   sim->SetEnergyBeam2(ebeam2);
   sim->SetPtHardRange(minPtHard, maxPtHard);
   sim->SetExtendedEventInfo(extended_event_info);
-  if (procStr == "dijet" || procStr == "dijet_lo" || procStr == "mb" || procStr == "soft") {
-    sim->EnableJetTree();
-  }
-  if (always_d_mesons || procStr.Contains("charm") || procStr.Contains("beauty")) {
+//  if (procStr == "dijet" || procStr == "dijet_lo" || procStr == "mb" || procStr == "soft") {
+//    sim->EnableJetTree();
+// }
+  if (always_d_mesons || procStr.Contains("charm") || procStr.Contains("beauty") || procStr == "mb") {
     sim->EnableDMesonJets();
   }
   if (beamType == "pPb") {
