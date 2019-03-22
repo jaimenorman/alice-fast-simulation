@@ -294,7 +294,7 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
   }
 
   OnTheFlySimulationGenerator* sim = new OnTheFlySimulationGenerator(trainName);
-  sim->EnableJetQA(kTRUE);
+  sim->EnableJetQA(kFALSE);
   sim->SetNumberOfEvents(pythiaEvents);
   sim->SetProcess(proc);
   sim->SetSpecialParticle(specialPart);
@@ -310,8 +310,13 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
   sim->SetExtendedEventInfo(extended_event_info);
 //  if (procStr == "dijet" || procStr == "dijet_lo" || procStr == "mb" || procStr == "soft") {
 //    sim->EnableJetTree();
+
 // }
-  if (always_d_mesons || procStr.Contains("charm") || procStr.Contains("beauty") || procStr == "mb") {
+    if (always_d_mesons || procStr.Contains("charm") || procStr.Contains("beauty") || procStr == "mb") {
+
+//  }
+ // if (always_d_mesons || procStr.Contains("charm") || procStr.Contains("beauty")) {
+
     sim->EnableDMesonJets();
   }
   if (beamType == "pPb") {
