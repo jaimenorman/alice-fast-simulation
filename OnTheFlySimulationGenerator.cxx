@@ -295,7 +295,6 @@ void OnTheFlySimulationGenerator::AddDJet(const char* file_name)
   eng->SetRejectedOriginMap(rejectOrigin);
 
 
-
   AliAnalysisTaskCharmHadronJets* pCharmHadronJetsTask = AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets("usedefault", AliJetContainer::kChargedJet, AliJetContainer::antikt_algorithm, AliJetContainer::pt_scheme,0.4, 2);
   pCharmHadronJetsTask->SetVzRange(-999,999);
   pCharmHadronJetsTask->SetPtHardRange(fMinPtHard, fMaxPtHard);
@@ -313,6 +312,7 @@ void OnTheFlySimulationGenerator::AddDJet(const char* file_name)
 //  }
   pCharmHadronJetsTask->SetApplyKinematicCuts(kTRUE);
   pCharmHadronJetsTask->SetRejectISR(fRejectISR);
+  pCharmHadronJetsTask->SetCandidatePDG(421);
 
 
   if (!fname.IsNull()) {
