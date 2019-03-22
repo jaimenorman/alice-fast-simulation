@@ -334,6 +334,7 @@ void CrossSection1(TString fname1 = "", TString fname2 = "") {
   TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistPtJet");
   TH1F	*fJetPt2 = (TH1F*)l2_2->FindObject("fHistPtJet");
 
+
   TCanvas *c1 = new TCanvas("c1","c1",800,600);
   c1->Divide(1,1);
   gStyle->SetOptStat(0);
@@ -341,28 +342,28 @@ void CrossSection1(TString fname1 = "", TString fname2 = "") {
 
   double_t k1;
   double_t k2;
+
   k1 = FindingK(k1,fname1);
   k2 = FindingK(k2,fname2);
+
   fJetPt1->Scale(k1);
   fJetPt2->Scale(k2);
-
-  //for (int i = 1; i<=fJetPt1->GetXaxis()->GetNbins(); i++) { fJetPt1-> Scale(1./fJetPt1->GetBinWidth(i)); }
-  //for (int j = 1; j<=fJetPt2->GetXaxis()->GetNbins(); j++) { fJetPt2-> Scale(1./fJetPt2->GetBinWidth(j)); }
 
   TH1F *fJetPt1new = (TH1F*) fJetPt1->Clone();
   TH1F *fJetPt2new = (TH1F*) fJetPt2->Clone();
 
   for (int i = 1; i<=fJetPt1->GetXaxis()->GetNbins(); i++) {
      double_t y1 = fJetPt1->GetBinWidth(i);
-     printf("The binwidth of %i is %f \n",i,y1);
      double_t y2= fJetPt1->GetBinContent(i);
-     printf("The bincontent of %i is %f \n",i,y2);
-     fJetPt1new->SetBinContent(i, y2/y1); }
+     fJetPt1new->SetBinContent(i, y2/y1);
+   }
 
   for (int i = 1; i<=fJetPt2->GetXaxis()->GetNbins(); i++) {
      double_t y1 = fJetPt2->GetBinWidth(i);
      double_t y2= fJetPt2->GetBinContent(i);
-     fJetPt2new->SetBinContent(i, y2/y1); }
+   }
+
+
 
   c1->cd(1);
 
@@ -375,6 +376,7 @@ void CrossSection1(TString fname1 = "", TString fname2 = "") {
   legend->AddEntry(fJetPt1new," Pythia6 ","l");
   legend->AddEntry(fJetPt2new," Pythia8 ","l");
   legend->Draw();
+
 
 }
 
@@ -412,9 +414,7 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
 
   for (int i = 1; i<=fJetPt1->GetXaxis()->GetNbins(); i++) {
      double_t y1 = fJetPt1->GetBinWidth(i);
-     //printf("The binwidth of %i is %f \n",i,y1);
      double_t y2= fJetPt1->GetBinContent(i);
-     //printf("The bincontent of %i is %f \n",i,y2);
      fJetPt1new->SetBinContent(i, y2/y1); }
 
   for (int i = 1; i<=fJetPt2->GetXaxis()->GetNbins(); i++) {
@@ -427,7 +427,7 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
   fJetPt1new->Draw("");
   fJetPt2new->Draw("SAME");
   fJetPt2new->SetLineColor(6);
-  fJetPt1new->Scale(1. / fJetPt1new->Integral("width")); //normalise?
+  fJetPt1new->Scale(1. / fJetPt1new->Integral("width")); //normalise
   fJetPt2new->Scale(1. / fJetPt2new->Integral("width"));
 
   legend->AddEntry(fJetPt1new," Pythia6 ","l");
