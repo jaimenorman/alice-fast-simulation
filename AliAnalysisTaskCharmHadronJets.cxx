@@ -373,7 +373,6 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   htitle = hname + ";N_{const.};counts";
   fHistManager.CreateTH1(hname, htitle, 50, 0.5, 50.5);
 
-
   hname = "fHistPtJet";
   htitle = hname + ";p_{T,Jet} (GeV/c) ;counts";
   fHistManager.CreateTH1(hname,htitle,99,1,100);
