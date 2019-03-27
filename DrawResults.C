@@ -2,6 +2,7 @@
 #include "TList.h"
 #include "TH1F.h"
 #include "TF1.h"
+#include "TGraph.h"
 #include "TCanvas.h"
 #include <stdio.h>
 #include <TH2.h>
@@ -14,7 +15,7 @@
 
 using namespace std;
 
-
+//R
 void drawresults(TString fname = "")
 
 {
@@ -312,12 +313,13 @@ double_t CrosSecMB= CrosSectMB->GetMean(2);
 double_t nbins = Nevts->GetNbinsX();
 double_t Nevt= Nevts->GetBinContent(nbins/2);
 
+printf("The value of CS_MB is %f and the number of evts is %f \n",CrosSecMB,Nevt);
    k=CrosSecMB/Nevt;
 
   return k;
 }
 
-
+//inclusive jet cross section
 void CrossSection1(TString fname1 = "", TString fname2 = "") {
 
   // get file
@@ -334,11 +336,17 @@ void CrossSection1(TString fname1 = "", TString fname2 = "") {
   TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistPtJet");
   TH1F	*fJetPt2 = (TH1F*)l2_2->FindObject("fHistPtJet");
 
+  TFile *f3 = new TFile("HEPData-ins1693308-v1-Table_1.root");
+  TGraphAsymmErrors	*fRefCrossSection = (TGraphAsymmErrors*)f3->Get("Table 1/Graph1D_y1");
+
 
   TCanvas *c1 = new TCanvas("c1","c1",800,600);
   c1->Divide(1,1);
   gStyle->SetOptStat(0);
   auto legend = new TLegend(0.1,0.7,0.48,0.9);
+
+  TCanvas *c5 = new TCanvas("c5","c5",800,600);
+  c5->Divide(1,1);
 
   double_t k1;
   double_t k2;
@@ -348,6 +356,7 @@ void CrossSection1(TString fname1 = "", TString fname2 = "") {
 
   fJetPt1->Scale(k1);
   fJetPt2->Scale(k2);
+//1/2
 
   TH1F *fJetPt1new = (TH1F*) fJetPt1->Clone();
   TH1F *fJetPt2new = (TH1F*) fJetPt2->Clone();
@@ -355,31 +364,67 @@ void CrossSection1(TString fname1 = "", TString fname2 = "") {
   for (int i = 1; i<=fJetPt1->GetXaxis()->GetNbins(); i++) {
      double_t y1 = fJetPt1->GetBinWidth(i);
      double_t y2= fJetPt1->GetBinContent(i);
-     fJetPt1new->SetBinContent(i, y2/y1);
+     fJetPt1new->SetBinContent(i, y2/(y1));
    }
 
   for (int i = 1; i<=fJetPt2->GetXaxis()->GetNbins(); i++) {
      double_t y1 = fJetPt2->GetBinWidth(i);
      double_t y2= fJetPt2->GetBinContent(i);
+     fJetPt2new->SetBinContent(i, y2/(y1));
+     printf("Number of bin is: %i bin width is %f bin content is %f \n",i,y1,y2);
    }
-
-
 
   c1->cd(1);
 
   fJetPt1new->Draw("");
   fJetPt2new->Draw("SAME");
+  fRefCrossSection->Draw("SAME");
   fJetPt2new->SetLineColor(6);
-  fJetPt1new->Scale(1. / fJetPt1new->Integral("width"));
-  fJetPt2new->Scale(1. / fJetPt2new->Integral("width"));
+  //fJetPt1new->Scale(1. / fJetPt1new->Integral("width"));
+  //fJetPt2new->Scale(1. / fJetPt2new->Integral("width"));
 
   legend->AddEntry(fJetPt1new," Pythia6 ","l");
   legend->AddEntry(fJetPt2new," Pythia8 ","l");
   legend->Draw();
 
+//TH1F *fRefCrossSection1 = (TH1F*) fRefCrossSection->Clone();
+//fRefCrossSection1->Reset();
+//fRefCrossSection1->SetBins(95,5.00,100.00);
+//double_t y = fRefCrossSection1->GetXaxis()->GetNbins();
+//printf("Number of bins is %f \n",y);
 
+Int_t n = fRefCrossSection->GetN();
+double_t x1[n],yy1[n];
+
+x1[n] = {0};
+yy1[n] = {0};
+
+for (int i = 1; i<=fRefCrossSection->GetN(); i++) {
+  double_t x, y;
+  fRefCrossSection->GetPoint(i,x,y);
+  Double_t histx = fJetPt2new->GetXaxis()->FindBin(x);
+  double_t y1 = fJetPt2new->GetBinContent(histx);
+  if (y1==0) continue;
+  x1[i]=x;
+  yy1[i]=y1/y;
+  //fRatioCS->SetPoint(i,x,y/y1);
 }
 
+for (Int_t i =1 ; i<=n; i++)
+{printf("x1= %f and y1 = %f ",x1[i],yy1[i]);}
+
+TGraph* gr = new TGraph(n,x1,yy1);
+
+//TH1F *gr1 = new TH1F("gr1","MC/data ",n-1,x1);
+//for (int i = 1; i<=fRefCrossSection->GetN(); i++) { gr1->Fill(yy1[i]);}
+
+  c5->cd(1);
+  gr->Draw("A*");
+  //gr->Draw("AC*");
+}
+
+
+//D0 meson (Lc Baryon) cross section
 void CrossSection2(TString fname1 = "", TString fname2 = "") {
 //cross section of d0
   // get file
@@ -396,18 +441,30 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
   TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_D0");
   TH1F	*fJetPt2 = (TH1F*)l2_2->FindObject("fHistJetPt_D0");
 
+  //TH1F	*fLcJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_Lc");
+  //TH1F	*fLcJetPt2 = (TH1F*)l2_2->FindObject("fHistJetPt_Lc");
+
+
   TCanvas *c3 = new TCanvas("c3","c3",800,600);
   c3->Divide(1,1);
+
+//  TCanvas *c4 = new TCanvas("c4","c4",800,600);
+  //c4->Divide(1,1);
+
   gStyle->SetOptStat(0);
   auto legend = new TLegend(0.1,0.7,0.48,0.9);
 
   double_t k1;
   double_t k2;
+
   k1 = FindingK(k1,fname1);
   k2 = FindingK(k2,fname2);
 
-  fJetPt1->Scale(k1);
-  fJetPt2->Scale(k2);
+  fJetPt1->Scale(k1/3);
+  fJetPt2->Scale(k2/3);
+
+  //fLcJetPt1->Scale(k1);
+  //fLcJetPt2->Scale(k2);
 
   TH1F *fJetPt1new = (TH1F*) fJetPt1->Clone();
   TH1F *fJetPt2new = (TH1F*) fJetPt2->Clone();
@@ -422,17 +479,39 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
      double_t y2= fJetPt2->GetBinContent(i);
      fJetPt2new->SetBinContent(i, y2/y1); }
 
-  c3->cd(1);
 
+    // TH1F *fLcJetPt1new = (TH1F*) fLcJetPt1->Clone();
+    // TH1F *fLcJetPt2new = (TH1F*) fLcJetPt2->Clone();
+
+    // for (int i = 1; i<=fLcJetPt1->GetXaxis()->GetNbins(); i++) {
+    //    double_t y1 = fLcJetPt1->GetBinWidth(i);
+    //    double_t y2= fLcJetPt1->GetBinContent(i);
+    //    fLcJetPt1new->SetBinContent(i, y2/y1); }
+    // for (int i = 1; i<=fLcJetPt2->GetXaxis()->GetNbins(); i++) {
+    //    double_t y1 = fLcJetPt2->GetBinWidth(i);
+    //    double_t y2= fLcJetPt2->GetBinContent(i);
+    //    fLcJetPt2new->SetBinContent(i, y2/y1); }
+
+
+  c3->cd(1);
   fJetPt1new->Draw("");
   fJetPt2new->Draw("SAME");
   fJetPt2new->SetLineColor(6);
-  fJetPt1new->Scale(1. / fJetPt1new->Integral("width")); //normalise
-  fJetPt2new->Scale(1. / fJetPt2new->Integral("width"));
-
+  //fJetPt1new->Scale(1. / fJetPt1new->Integral("width")); //normalise
+  //fJetPt2new->Scale(1. / fJetPt2new->Integral("width"));
   legend->AddEntry(fJetPt1new," Pythia6 ","l");
   legend->AddEntry(fJetPt2new," Pythia8 ","l");
   legend->Draw();
+
+//  c4->cd(1);
+//  fLcJetPt1new->Draw("");
+//  fLcJetPt2new->Draw("SAME");
+//  fLcJetPt2new->SetLineColor(6);
+//  fLcJetPt1new->Scale(1. / fLcJetPt1new->Integral("width")); //normalise
+//  fLcJetPt2new->Scale(1. / fLcJetPt2new->Integral("width"));
+
+//  legend->Draw();
+
 
 }
 
@@ -448,5 +527,4 @@ void DrawResults() {
   DrawResults1(fname1,fname2);
   CrossSection1(fname1,fname2);
   CrossSection2(fname1,fname2);
-
 }

@@ -375,7 +375,7 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname = "fHistPtJet";
   htitle = hname + ";p_{T,Jet} (GeV/c) ;counts";
-  fHistManager.CreateTH1(hname,htitle,99,1,100);
+  fHistManager.CreateTH1(hname,htitle,45,5,50);
 
   hname = "fHistPhiJet";
   htitle = hname + ";#phi_{Jet} ;counts ";
@@ -389,6 +389,33 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   htitle = hname + ";p_{T,D0Jet} (GeV/c) ;counts";
   fHistManager.CreateTH1(hname,htitle,99,1,100);
 
+  hname = "fHistLcJet_DR";
+  htitle = hname + ";#Delta R;counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.0);
+
+  hname = "fHistLcJet_ptLc_ptJet";
+  htitle = hname + ";p_{T,const,};p_{T,jet};counts";
+  fHistManager.CreateTH2(hname, htitle, 60, 0, 30, 60, 0, 30 );
+
+  hname = "fHistLCJet_ptLc_ptJet_Z";
+  htitle = hname + ";p_{T,const,};p_{T,jet};Z_{const.-jet}";
+  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+
+  hname = "fHistLcJet_ptLc_ptJet_DR";
+  htitle = hname + ";p_{T,const,};p_{T,jet};#Delta R_{const.-jet}";
+  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+
+  hname = "fHistLcJet_Z";
+  htitle = hname + ";Z_{#Lambda_{c}-jet} ;counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.5);
+
+  hname = "fHistNConstInLcJet";
+  htitle = hname + ";N_{const.};counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0.5, 50.5);
+
+  hname = "fHistJetPt_Lc";
+  htitle = hname + ";p_{T,#Lambda_{c} Jet} (GeV/c) ;counts";
+  fHistManager.CreateTH1(hname,htitle,99,1,100);
 
 
   // TO DO - set other histograms
@@ -759,12 +786,13 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
     Double_t ptJet = TMath::Sqrt(jet.px()*jet.px() + jet.py()*jet.py());
     Printf("jet pt = %f",ptJet);
 
-    fHistManager.FillTH1("fHistPtJet",ptJet);
+    if (jet.pseudorapidity()<0.5 && jet.pseudorapidity()>-0.5) { fHistManager.FillTH1("fHistPtJet",ptJet); }
     fHistManager.FillTH1("fHistEtaJet",jet.pseudorapidity());
     fHistManager.FillTH1("fHistPhiJet",jet.phi());
 
     Int_t nDmesonsInJet = 0;
     Int_t nConstsInJet = 0;
+    Int_t nLcBaryonsInJet=0;
 
     for (auto constituent : jet.constituents()) {
       Int_t iPart = constituent.user_index() - 100;
@@ -789,19 +817,36 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
       fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_DR", ptConstJet, ptJet, dR);
       fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_Z", ptConstJet, ptJet, zConstJet);
 //The special PDG candidate . (With MinimumBias pythia )
-      if (TMath::Abs(part->PdgCode()) == 421) {
+      Int_t SpecialCandidate= TMath::Abs(part->PdgCode());
+
+      if ( SpecialCandidate == 421) {
+        printf("HIiiiiiiiiiiiiiiiiiiiiiiiiiiii 1 \n");
         nDmesonsInJet++;
         fHistManager.FillTH1("fHistDJet_DR", dR);
         fHistManager.FillTH1("fHistDJet_Z", zConstJet);
         fHistManager.FillTH2("fHistDJet_ptD_ptJet", ptConstJet, ptJet);
         fHistManager.FillTH3("fHistDJet_ptD_ptJet_DR", ptConstJet, ptJet, dR);
         fHistManager.FillTH3("fHistDJet_ptD_ptJet_Z", ptConstJet, ptJet, zConstJet);
-      }
-    }
+       printf("HIiiiiiiiiiiiiiiiiiiiiiiiiiiii 2 \n");}
+}
+      //if (SpecialCandidate == 4122) {
+      //  printf("HOoooooooooooooooooooooooooooo 1 \n ");
+      //  nLcBaryonsInJet++;
+      //  fHistManager.FillTH1("fHistLcJet_DR", dR);
+      //  fHistManager.FillTH1("fHistLcJet_Z", zConstJet);
+      //  fHistManager.FillTH2("fHistLcJet_ptLc_ptJet", ptConstJet, ptJet);
+      //  fHistManager.FillTH3("fHistLcJet_ptLc_ptJet_DR", ptConstJet, ptJet, dR);
+      //  fHistManager.FillTH3("fHistLcJet_ptLc_ptJet_Z", ptConstJet, ptJet, zConstJet);
+      //  printf("HOoooooooooooooooooooooooooooo 2 \n ");
+      //}
+//}
     fHistManager.FillTH1("fHistNConstInJet", nConstsInJet);
 
-    if(nDmesonsInJet>0) fHistManager.FillTH1("fHistNConstInDJet", nConstsInJet);    //
+    if(nDmesonsInJet>0) fHistManager.FillTH1("fHistNConstInDJet", nConstsInJet);
     if(nDmesonsInJet>0) fHistManager.FillTH1("fHistJetPt_D0",ptJet);
+
+    if(nLcBaryonsInJet>0) fHistManager.FillTH1("fHistNConstInLcJet", nConstsInJet);
+    if(nLcBaryonsInJet>0) fHistManager.FillTH1("fHistJetPt_Lc",ptJet);
 
 
   }
