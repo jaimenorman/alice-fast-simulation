@@ -54,6 +54,7 @@ OnTheFlySimulationGenerator::OnTheFlySimulationGenerator() :
   fJetQA(kFALSE),
   fJetTree(kFALSE),
   fDMesonJets(kFALSE),
+  //fLcBaryonJets(kFALSE),
   fEnergyBeam1(3500),
   fEnergyBeam2(3500),
   fRejectISR(kFALSE),
@@ -62,11 +63,11 @@ OnTheFlySimulationGenerator::OnTheFlySimulationGenerator() :
   fDecayer(kPythia6),
   fExtendedEventInfo(kFALSE),
   fHistManager(),
-  fDebugClassNames({"AliGenPythia_dev", "AliPythia6_dev", "AliPythia8_dev", 
+  fDebugClassNames({"AliGenPythia_dev", "AliPythia6_dev", "AliPythia8_dev",
   "AliGenEvtGen_dev", "AliGenExtFile_dev", "AliGenReaderHepMC_dev", "THepMCParser_dev",
-  "AliMCGenHandler", 
-  "AliAnalysisTaskEmcalJetQA", "AliAnalysisTaskDmesonJets", "AliEmcalJetTask", 
-  "AliAnalysisTaskEmcalJetTree<AliEmcalJetInfoSummaryPP, AliEmcalJetEventInfoSummaryPP>", 
+  "AliMCGenHandler",
+  "AliAnalysisTaskEmcalJetQA", "AliAnalysisTaskDmesonJets", "AliEmcalJetTask",
+  "AliAnalysisTaskEmcalJetTree<AliEmcalJetInfoSummaryPP, AliEmcalJetEventInfoSummaryPP>",
   "AliAnalysisTaskDmesonJets::AnalysisEngine"})
 {
 }
@@ -90,6 +91,7 @@ OnTheFlySimulationGenerator::OnTheFlySimulationGenerator(TString taskname) :
   fJetQA(kFALSE),
   fJetTree(kFALSE),
   fDMesonJets(kFALSE),
+  //fLcBaryonJets(kFALSE),
   fEnergyBeam1(3500),
   fEnergyBeam2(3500),
   fRejectISR(kFALSE),
@@ -98,11 +100,11 @@ OnTheFlySimulationGenerator::OnTheFlySimulationGenerator(TString taskname) :
   fDecayer(kPythia6),
   fExtendedEventInfo(kFALSE),
   fHistManager(),
-  fDebugClassNames({"AliGenPythia_dev", "AliPythia6_dev", "AliPythia8_dev", 
+  fDebugClassNames({"AliGenPythia_dev", "AliPythia6_dev", "AliPythia8_dev",
   "AliGenEvtGen_dev", "AliGenExtFile_dev", "AliGenReaderHepMC_dev", "THepMCParser_dev",
-  "AliMCGenHandler", 
-  "AliAnalysisTaskEmcalJetQA", "AliAnalysisTaskDmesonJets", "AliEmcalJetTask", 
-  "AliAnalysisTaskEmcalJetTree<AliEmcalJetInfoSummaryPP, AliEmcalJetEventInfoSummaryPP>", 
+  "AliMCGenHandler",
+  "AliAnalysisTaskEmcalJetQA", "AliAnalysisTaskDmesonJets", "AliEmcalJetTask",
+  "AliAnalysisTaskEmcalJetTree<AliEmcalJetInfoSummaryPP, AliEmcalJetEventInfoSummaryPP>",
   "AliAnalysisTaskDmesonJets::AnalysisEngine"})
 {
 }
@@ -126,6 +128,7 @@ OnTheFlySimulationGenerator::OnTheFlySimulationGenerator(TString taskname, Int_t
   fJetQA(kFALSE),
   fJetTree(kFALSE),
   fDMesonJets(kFALSE),
+  //fLcBaryonJets(kFALSE),
   fEnergyBeam1(3500),
   fEnergyBeam2(3500),
   fRejectISR(kFALSE),
@@ -183,12 +186,19 @@ void OnTheFlySimulationGenerator::PrepareAnalysisManager()
 
   if (fJetQA) AddJetQA();
   if (fDMesonJets) AddDJet();
+  // if (fLcBaryonJets) AddLcJet();
   if (fJetTree) {
     if (fDMesonJets) {
       TString fname(AliAnalysisManager::GetCommonFileName());
       fname.ReplaceAll(".root", "_jets.root");
       AddJetTree(fname);
     }
+
+    //if (fLcBaryonJets) {
+    //  TString fname(AliAnalysisManager::GetCommonFileName());
+    //  fname.ReplaceAll(".root", "_jets.root");
+    //  AddJetTree(fname);
+    //}
     else {
       AddJetTree();
     }
@@ -295,25 +305,43 @@ void OnTheFlySimulationGenerator::AddDJet(const char* file_name)
   eng->SetRejectedOriginMap(rejectOrigin);
 
 
-  AliAnalysisTaskCharmHadronJets* pCharmHadronJetsTask = AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets("usedefault", AliJetContainer::kChargedJet, AliJetContainer::antikt_algorithm, AliJetContainer::pt_scheme,0.4, 2);
-  pCharmHadronJetsTask->SetVzRange(-999,999);
-  pCharmHadronJetsTask->SetPtHardRange(fMinPtHard, fMaxPtHard);
-  if (fMinPtHard > -1 && fMaxPtHard > fMinPtHard) pCharmHadronJetsTask->SetMCFilter();
-  pCharmHadronJetsTask->SetJetPtFactor(4);
-  pCharmHadronJetsTask->SetIsPythia(kTRUE);
-  pCharmHadronJetsTask->SetNeedEmcalGeom(kFALSE);
-  pCharmHadronJetsTask->SetForceBeamType(AliAnalysisTaskEmcalJetLight::kpp);
-  pCharmHadronJetsTask->SetCentralityEstimation(AliAnalysisTaskEmcalJetLight::kNoCentrality);
+
+
+  //AliAnalysisTaskCharmHadronJets* pCharmHadronJetsTask = AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets("usedefault", AliJetContainer::kChargedJet, AliJetContainer::antikt_algorithm, AliJetContainer::pt_scheme,0.4, 2);
+  AliAnalysisTaskCharmHadronJets* pCharmHadronJetsTaskD0 = AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets("usedefault", AliJetContainer::kChargedJet, AliJetContainer::antikt_algorithm, AliJetContainer::pt_scheme,0.4, 2,"D0");
+  pCharmHadronJetsTaskD0->SetVzRange(-999,999);
+  pCharmHadronJetsTaskD0->SetPtHardRange(fMinPtHard, fMaxPtHard);
+  if (fMinPtHard > -1 && fMaxPtHard > fMinPtHard) pCharmHadronJetsTaskD0->SetMCFilter();
+  pCharmHadronJetsTaskD0->SetJetPtFactor(4);
+  pCharmHadronJetsTaskD0->SetIsPythia(kTRUE);
+  pCharmHadronJetsTaskD0->SetNeedEmcalGeom(kFALSE);
+  pCharmHadronJetsTaskD0->SetForceBeamType(AliAnalysisTaskEmcalJetLight::kpp);
+  pCharmHadronJetsTaskD0->SetCentralityEstimation(AliAnalysisTaskEmcalJetLight::kNoCentrality);
 //  if (fExtendedEventInfo) {
 //    pCharmHadronJetsTask->SetOutputType(AliAnalysisTaskCharmHadronJets::kTreeExtendedOutput);
 //  }
 //  else {
 //    pCharmHadronJetsTask->SetOutputType(AliAnalysisTaskCharmHadronJets::kTreeOutput);
 //  }
-  pCharmHadronJetsTask->SetApplyKinematicCuts(kTRUE);
-  pCharmHadronJetsTask->SetRejectISR(fRejectISR);
-  pCharmHadronJetsTask->SetCandidatePDG(421);
+  pCharmHadronJetsTaskD0->SetApplyKinematicCuts(kTRUE);
+  pCharmHadronJetsTaskD0->SetRejectISR(fRejectISR);
+  pCharmHadronJetsTaskD0->SetCandidatePDG(421);
 
+
+  AliAnalysisTaskCharmHadronJets* pCharmHadronJetsTaskLc = AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets("usedefault", AliJetContainer::kChargedJet, AliJetContainer::antikt_algorithm, AliJetContainer::pt_scheme,0.4, 2, "Lc");
+  pCharmHadronJetsTaskLc->SetVzRange(-999,999);
+  pCharmHadronJetsTaskLc->SetPtHardRange(fMinPtHard, fMaxPtHard);
+  if (fMinPtHard > -1 && fMaxPtHard > fMinPtHard) pCharmHadronJetsTaskLc->SetMCFilter();
+  pCharmHadronJetsTaskLc->SetJetPtFactor(4);
+  pCharmHadronJetsTaskLc->SetIsPythia(kTRUE);
+  pCharmHadronJetsTaskLc->SetNeedEmcalGeom(kFALSE);
+  pCharmHadronJetsTaskLc->SetForceBeamType(AliAnalysisTaskEmcalJetLight::kpp);
+  pCharmHadronJetsTaskLc->SetCentralityEstimation(AliAnalysisTaskEmcalJetLight::kNoCentrality);
+  pCharmHadronJetsTaskLc->SetApplyKinematicCuts(kTRUE);
+  pCharmHadronJetsTaskLc->SetRejectISR(fRejectISR);
+  pCharmHadronJetsTaskLc->SetCandidatePDG(4122);
+
+//try1 : 413
 
   if (!fname.IsNull()) {
     AliAnalysisManager::SetCommonFileName(old_file_name);
