@@ -559,7 +559,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
         AliAODMCParticle* moth1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
         fHistManager.FillTH1("fMotherLc_pt", moth1->Pt());
 
-        UInt_t iddaughter=part.second->GetFirstDaughter();
+        UInt_t iddaughter=part.second->GetDaughterFirst();
         AliAODMCParticle* part2 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaughter);
         UInt_t daught=part2->GetPdgCode();
         fHistManager.FillTH1("fDaughterLc_pt", part2->Pt());
@@ -600,7 +600,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
          UInt_t Ndaught = part.second->GetNDaughters();
         // if we want all the N daughters.
          for (Int_t j = 0; j <= Ndaught; j++){
-           UInt_t iddaught = part.second->GetDaughter(j);
+           UInt_t iddaught = part.second->GetDaughterLabel(j);
            AliAODMCParticle* daught1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaught);
            UInt_t Pdgdaught1= daught1->GetPdgCode();
            printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
@@ -657,7 +657,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
    AliAODMCParticle* moth1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
    fHistManager.FillTH1("fMotherD0_pt", moth1->Pt());
 
-   UInt_t iddaughter=part.second->GetFirstDaughter();
+   UInt_t iddaughter=part.second->GetDaughterFirst();
    AliAODMCParticle* part2 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaughter);
    UInt_t daught=part2->GetPdgCode();
    fHistManager.FillTH1("fDaughterD0_pt", part2->Pt());
@@ -703,7 +703,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
 // if we want all the N daughters.
    for (Int_t j = 0; j <= Ndaught; j++){
 
-     UInt_t iddaught = part.second->GetDaughter(j);
+     UInt_t iddaught = part.second->GetDaughterLabel(j);
      AliAODMCParticle* daught1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaught);
      UInt_t Pdgdaught1= daught1->GetPdgCode();
     // printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
@@ -801,7 +801,7 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
         fHistManager.FillTH3("fHistSpeCandiJet_ptSpeCandi_ptJet_Z", ptConstJet, ptJet, zConstJet);
        }
       }
-      
+
     fHistManager.FillTH1("fHistNConstInJet", nConstsInJet);
 
     if(nSpeCandiInJet>0) fHistManager.FillTH1("fHistNConstInSpeCandiJet", nConstsInJet);
@@ -867,7 +867,7 @@ void AliAnalysisTaskCharmHadronJets::FillPartonLevelHistograms()
 
     Bool_t lastInPartonShower = kTRUE;
     Bool_t hadronDaughter = kFALSE;
-    for (Int_t daughterIndex = part.second->GetFirstDaughter(); daughterIndex <= part.second->GetLastDaughter(); daughterIndex++){
+    for (Int_t daughterIndex = part.second->GetDaughterFirst(); daughterIndex <= part.second->GetDaughterLast(); daughterIndex++){
       if (daughterIndex < 0) {
         AliDebugStream(5) << "Could not find daughter index!" << std::endl;
         continue;
