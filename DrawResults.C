@@ -11,8 +11,6 @@
 #include <iostream>
 #include <string>
 #include <TH1.h>
-
-
 using namespace std;
 
 //R
@@ -261,20 +259,42 @@ zLc->Scale(1./ zLc->Integral("width"));
 
 void DrawResults1(TString fname1 = "",TString fname2 = "") {
   // get file
-  TFile *f1 = new TFile(fname1.Data());
-  TFile *f2 = new TFile(fname2.Data());
+  //TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
+  TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1554121250/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root");
+  TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/AnalysisResults_FastSim_pythia8_charm_ColorHard_1554883740.root");
+  //TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/AnalysisResults_FastSim_pythia8_charm_ColorHard_1554409872.root");
+  //TFile *f1 = new TFile(fname1.Data());
+  //TFile *f2 = new TFile(fname2.Data());
+
   // get lists containing histograms
-  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_histos");
-  THashList	*l2_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets");
+  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l1_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
 
-  TList	*l2 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_histos");
-  THashList	*l2_2 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets");
+  TList	*l2 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+  THashList	*l2_1 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+
+  TList	*l3 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l3_1 = (THashList*)l3->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l4 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+  THashList	*l4_1 = (THashList*)l4->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+
+
   // get histograms
-  TH1F	*fhLc_pt1 = (TH1F*)l2_1->FindObject("fLcPt");
-  TH1F	*fhD0_pt1 = (TH1F*)l2_1->FindObject("fD0Pt");
+  //TH1F	*fhLc_pt1 = (TH1F*)l2_1->FindObject("fLcPt");
+  //TH1F	*fhD0_pt1 = (TH1F*)l2_1->FindObject("fD0Pt");
 
-  TH1F	*fhLc_pt2 = (TH1F*)l2_2->FindObject("fLcPt");
-  TH1F	*fhD0_pt2 = (TH1F*)l2_2->FindObject("fD0Pt");
+  //TH1F	*fhLc_pt2 = (TH1F*)l2_2->FindObject("fLcPt");
+  //TH1F	*fhD0_pt2 = (TH1F*)l2_2->FindObject("fD0Pt");
+
+//pythia6
+  TH1F	*fhD0_pt1 = (TH1F*)l1_1->FindObject("SpCand_UE_Pt"); //fHistJetPt_SpeCandi
+  TH1F	*fhLc_pt1 = (TH1F*)l2_1->FindObject("SpCand_UE_Pt"); //fHistJetPt_SpeCandi
+
+//PYTHIA8
+TH1F	*fhD0_pt2 = (TH1F*)l3_1->FindObject("fHistJetPt_SpeCandi");
+TH1F	*fhLc_pt2 = (TH1F*)l4_1->FindObject("fHistJetPt_SpeCandi");
+
 
   TFile *f3 = new TFile("lcd0_pythia8_all.root");
   TH1F *lcd0 = (TH1F*)f3->Get("h_lcd0_monash");
@@ -286,26 +306,29 @@ void DrawResults1(TString fname1 = "",TString fname2 = "") {
 
   c2->cd(1);
   fhLc_pt1->Divide(fhD0_pt1);
-  fhLc_pt1->Draw("C");
-  //fhLc_pt1->Sumw2();
-  fhLc_pt2->Divide(fhD0_pt2);
-  fhLc_pt2->Draw("SAME,C");
-  //fhLc_pt2->Sumw2();
-  fhLc_pt2->SetLineColor(6);
-  lcd0->Draw("SAME");
+  fhLc_pt1->Draw("");//C
 
-  legend->AddEntry(fhLc_pt1," Pythia6 ","l");
-  legend->AddEntry(fhLc_pt2," Pythia8 ","l");
-  legend->AddEntry(lcd0," Ref: Pythia8 ","l");
+  fhLc_pt2->Divide(fhD0_pt2);
+  fhLc_pt2->Draw("SAME");
+
+
+  fhLc_pt2->SetLineColor(6);
+
+  legend->AddEntry(fhLc_pt1," Pythia8_charm_ColorHard mode2 ","l");
+  legend->AddEntry(fhLc_pt2," Pythia8_charm ","l");
+  //legend->AddEntry(lcd0," Ref: Pythia8 ","l");
   legend->Draw();
 
 }
 
 double_t FindingK (double_t k,TString fname = "")
 {
-   TFile *f = new TFile(fname.Data());
-   TList	*l1 = (TList*)f->Get("AliAnalysisTaskCharmHadronJets_histos");
+  TFile *f = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_mb_1553871816/stage_1/output/001/AnalysisResults_FastSim_pythia6_mb.root");
 
+  //TFile *f = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1554121250/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root");
+
+   //TFile *f = new TFile(fname.Data());
+   TList	*l1 = (TList*)f->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
    TH1F *Nevts=(TH1F*)l1->FindObject("fHistEventCount");
    TH1F *CrosSectMB=(TH1F*)l1->FindObject("fHistXsection");
 
@@ -322,15 +345,20 @@ printf("The value of CS_MB is %f and the number of evts is %f \n",CrosSecMB,Nevt
 //inclusive jet cross section
 void CrossSection1(TString fname1 = "", TString fname2 = "") {
 
+//  TFile *f2 = TFile::Open(Form("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_mb_1553871816/stage_1/output/001/%s",fname2.Data()));
+
+  //TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_mb_1553871816/stage_1/output/001/AnalysisResults_FastSim_pythia6_mb.root");
+  //TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_mb_1553871816/stage_1/output/001/AnalysisResults_FastSim_pythia6_mb.root");
+
   // get file
   TFile *f1 = new TFile(fname1.Data());
   TFile *f2 = new TFile(fname2.Data());
   // get lists containing histograms
-  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_histos");
-  THashList	*l2_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets");
+  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l2_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
 
-  TList	*l2 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_histos");
-  THashList	*l2_2 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets");
+  TList	*l2 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l2_2 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
   // get histograms
 
   TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistPtJet");
@@ -377,14 +405,16 @@ void CrossSection1(TString fname1 = "", TString fname2 = "") {
   c1->cd(1);
 
   fJetPt1new->Draw("");
-  fJetPt2new->Draw("SAME");
+  //fJetPt2new->Draw("SAME");
   fRefCrossSection->Draw("SAME");
   fJetPt2new->SetLineColor(6);
   //fJetPt1new->Scale(1. / fJetPt1new->Integral("width"));
   //fJetPt2new->Scale(1. / fJetPt2new->Integral("width"));
 
   legend->AddEntry(fJetPt1new," Pythia6 ","l");
-  legend->AddEntry(fJetPt2new," Pythia8 ","l");
+  //legend->AddEntry(fJetPt2new," Pythia8 ","l");
+  legend->AddEntry(fRefCrossSection,"HEPData.86229.v1/t1","l");
+
   legend->Draw();
 
 //TH1F *fRefCrossSection1 = (TH1F*) fRefCrossSection->Clone();
@@ -402,8 +432,8 @@ yy1[n] = {0};
 for (int i = 1; i<=fRefCrossSection->GetN(); i++) {
   double_t x, y;
   fRefCrossSection->GetPoint(i,x,y);
-  Double_t histx = fJetPt2new->GetXaxis()->FindBin(x);
-  double_t y1 = fJetPt2new->GetBinContent(histx);
+  Double_t histx = fJetPt1new->GetXaxis()->FindBin(x);
+  double_t y1 = fJetPt1new->GetBinContent(histx); //2
   if (y1==0) continue;
   x1[i]=x;
   yy1[i]=y1/y;
@@ -426,20 +456,22 @@ TGraph* gr = new TGraph(n,x1,yy1);
 
 //D0 meson (Lc Baryon) cross section
 void CrossSection2(TString fname1 = "", TString fname2 = "") {
-//cross section of d0
   // get file
   TFile *f1 = new TFile(fname1.Data());
   TFile *f2 = new TFile(fname2.Data());
-  // get lists containing histograms
-  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_histos");
-  THashList	*l2_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets");
+    //TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
+    //TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
 
-  TList	*l2 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_histos");
-  THashList	*l2_2 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets");
+  // get lists containing histograms
+  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l2_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l2 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+  THashList	*l2_2 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
   // get histograms
 
-  TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_D0");
-  TH1F	*fJetPt2 = (TH1F*)l2_2->FindObject("fHistJetPt_D0");
+  TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_SpeCandi");
+  TH1F	*fJetPt2 = (TH1F*)l2_2->FindObject("fHistJetPt_SpeCandi");
 
   //TH1F	*fLcJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_Lc");
   //TH1F	*fLcJetPt2 = (TH1F*)l2_2->FindObject("fHistJetPt_Lc");
@@ -460,8 +492,9 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
   k1 = FindingK(k1,fname1);
   k2 = FindingK(k2,fname2);
 
-  fJetPt1->Scale(k1/3);
-  fJetPt2->Scale(k2/3);
+  fJetPt1->Scale(k1);
+  fJetPt2->Scale(k2);
+//1/3??
 
   //fLcJetPt1->Scale(k1);
   //fLcJetPt2->Scale(k2);
@@ -497,10 +530,9 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
   fJetPt1new->Draw("");
   fJetPt2new->Draw("SAME");
   fJetPt2new->SetLineColor(6);
-  //fJetPt1new->Scale(1. / fJetPt1new->Integral("width")); //normalise
-  //fJetPt2new->Scale(1. / fJetPt2new->Integral("width"));
-  legend->AddEntry(fJetPt1new," Pythia6 ","l");
-  legend->AddEntry(fJetPt2new," Pythia8 ","l");
+
+  legend->AddEntry(fJetPt1new," D0 ","l");
+  legend->AddEntry(fJetPt2new," Lc ","l");
   legend->Draw();
 
 //  c4->cd(1);
@@ -512,6 +544,46 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
 
 //  legend->Draw();
 
+
+}
+
+void Z() {
+
+  TFile *f = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1554121250/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root");
+
+  TList	*l1 = (TList*)f->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l1_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l2 = (TList*)f->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+  THashList	*l2_1 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+
+  TH3F	*fhD0 = (TH3F*)l1_1->FindObject("fHistSpeCandiJet_ptSpeCandi_ptJet_Z");
+  TH3F	*fhLc = (TH3F*)l2_1->FindObject("fHistSpeCandiJet_ptSpeCandi_ptJet_Z");
+
+  TH2D* fhD0_1 = (TH2D*)fhD0->Project3DProfile("zy");
+  fhD0_1->SetName("fhD0_1_zx");
+  TH2D* fhLc_1 = (TH2D*)fhLc->Project3DProfile("zy");
+
+  TH1D* Proj_ZD0 = (TH1D*)fhD0_1->ProjectionY("fhD0_1",0,3,"");
+
+  TCanvas *c6 = new TCanvas("c6","c6",800,600);
+  TCanvas *c7 = new TCanvas("c7","c7",800,600);
+  c6->Divide(3,1);
+  c7->Divide(2,1);
+
+  c6->cd(1);
+  fhD0->Draw("");
+
+  c6->cd(2);
+  fhD0_1->Draw("colz");
+
+  c6->cd(3);
+  Proj_ZD0->Draw("");
+
+  c7->cd(1);
+  fhLc->Draw("");
+  c7->cd(2);
+  fhLc_1->Draw("colz");
 
 }
 
