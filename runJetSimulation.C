@@ -8,7 +8,7 @@
 #include <TROOT.h>
 #include <TString.h>
 
-#include <PythiaProcesses.h>
+#include "PythiaProcess_dev.h"
 #include <AliLog.h>
 
 #include "OnTheFlySimulationGenerator.h"
@@ -35,6 +35,9 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
   }
 
   Process_t proc = kPyMbDefault;
+  //Process_t proc = kPyCharmColorSoft;
+  //Process_t proc = kPyCharmColorHard;
+
   OnTheFlySimulationGenerator::ESpecialParticle_t specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
   OnTheFlySimulationGenerator::EGenerator_t partonEvent = OnTheFlySimulationGenerator::kPythia6;
   OnTheFlySimulationGenerator::EGenerator_t hadronization = OnTheFlySimulationGenerator::kPythia6;
@@ -123,10 +126,6 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
       proc = kPyJets;
       specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
     }
-    else if (procStr == "soft") {
-      proc = kPyMbDefault;
-      specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
-    }
     else if (procStr == "mb") {
       proc = kPyMbNonDiffr;
       specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
@@ -175,10 +174,6 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
       proc = kPyJets;
       specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
     }
-    else if (procStr == "soft") {
-      proc = kPyMbDefault;
-      specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
-    }
     else if (procStr == "mb") {
       proc = kPyMbNonDiffr;
       specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
@@ -193,6 +188,14 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
     }
     else if (procStr == "charm") {
       proc = kPyMbNonDiffr;
+      specialPart = OnTheFlySimulationGenerator::kccbar;
+    }
+    else if(procStr == "charm_ColorHard" ) {
+      proc = kPyCharmColorHard;
+      specialPart = OnTheFlySimulationGenerator::kccbar;
+    }
+    else if(procStr == "charm_ColorSoft" ) {
+      proc = kPyCharmColorSoft;
       specialPart = OnTheFlySimulationGenerator::kccbar;
     }
     else if (procStr == "beauty") {
