@@ -269,7 +269,7 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname = "ProjPion_R_Cut0";
   htitle = hname + ";R ;counts";
-  fHistManager.CreateTH1(hname,htitle,100,0,4);
+  fHistManager.CreateTH1(hname,htitle,100,0,10);//
 
   hname = "ProjPion_R_Cut1";
   htitle = hname + ";R ;counts";
@@ -331,23 +331,23 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname = "fHistConstJet_Z";
   htitle = hname + ";Z_{const.-jet};counts";
-  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.5);
+  fHistManager.CreateTH1(hname, htitle, 20, 0, 1.);
 
   hname = "fHistConstJet_ptConst_ptJet";
   htitle = hname + ";p_{T,const,};p_{T,jet};counts";
-  fHistManager.CreateTH2(hname, htitle, 60, 0, 30, 60, 0, 30 );
+  fHistManager.CreateTH2(hname, htitle, 70, 0, 70, 70, 0, 70 );
 
   hname = "fHistConstJet_ptConst_ptJet_Z";
   htitle = hname + ";p_{T,const,};p_{T,jet};Z_{const.-jet}";
-  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+  fHistManager.CreateTH3(hname, htitle, 70, 0, 70, 70, 0, 70, 20, 0, 1. );
 
   hname = "fHistConstJet_ptConst_ptJet_DR";
   htitle = hname + ";p_{T,const,};p_{T,jet};#Delta R_{const.-jet}";
-  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+  fHistManager.CreateTH3(hname, htitle, 70, 0, 70, 70, 0, 70, 50, 0, 1.5 );
 
   hname = "fHistSpeCandiJet_Z";
   htitle = hname + ";Z_{D-jet} ;counts";
-  fHistManager.CreateTH1(hname, htitle, 50, 0, 1.5);
+  fHistManager.CreateTH1(hname, htitle, 20, 0, 1.);// (50,0,1.5 )
 
   hname = "fHistSpeCandiJet_DR";
   htitle = hname + ";#Delta R;counts";
@@ -355,15 +355,15 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname = "fHistSpeCandiJet_ptSpeCandi_ptJet";
   htitle = hname + ";p_{T,const,};p_{T,jet};counts";
-  fHistManager.CreateTH2(hname, htitle, 60, 0, 30, 60, 0, 30 );
+  fHistManager.CreateTH2(hname, htitle, 70, 0, 70, 70, 0, 70 ); // (60,0,30)
 
   hname = "fHistSpeCandiJet_ptSpeCandi_ptJet_Z";
   htitle = hname + ";p_{T,const,};p_{T,jet};Z_{const.-jet}";
-  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+  fHistManager.CreateTH3(hname, htitle, 70, 0, 70, 70, 0, 70, 20, 0, 1. ); // PS: change other bins to correspond to this one !
 
   hname = "fHistSpeCandiJet_ptSpeCandi_ptJet_DR";
   htitle = hname + ";p_{T,const,};p_{T,jet};#Delta R_{const.-jet}";
-  fHistManager.CreateTH3(hname, htitle, 60, 0, 30, 60, 0, 30, 50, 0, 1.5 );
+  fHistManager.CreateTH3(hname, htitle, 70, 0, 70, 70, 0, 70, 50, 0, 1.5 );
 
   hname = "fHistNConstInJet";
   htitle = hname + ";N_{const.};counts";
@@ -386,8 +386,37 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   fHistManager.CreateTH1(hname,htitle,50,-10,10);
 
   hname = "fHistJetPt_SpeCandi";
+  htitle = hname + ";p_{T, Jet} (GeV/c) ;counts";
+  fHistManager.CreateTH1(hname,htitle,99,1,100);
+
+  hname = "fHistJetPt_SpeCandi_EtaCond";
   htitle = hname + ";p_{T,D0Jet} (GeV/c) ;counts";
   fHistManager.CreateTH1(hname,htitle,99,1,100);
+
+  hname = "fLeadingJet_SpCand_R";
+  htitle = hname + ";#Delta R;counts";
+  fHistManager.CreateTH1(hname, htitle, 50, 0, 10.0); //1.0??
+
+  hname = "fLeadingJet_SpCand_DPhi";
+  htitle = hname + ";D#phi_ ;counts ";
+  fHistManager.CreateTH1(hname,htitle,125,0,TMath::TwoPi());
+
+  hname = "fLeadingJet_SpCand_DEta";
+  htitle = hname +";D#eta_ ;counts ";
+  fHistManager.CreateTH1(hname,htitle,50,-10,10);
+
+  hname = "fLeadingJet_SpCand_DEta_DPhi";
+  htitle = hname + ";D#eta_  ;D#phi_ ;counts";
+  fHistManager.CreateTH2(hname, htitle, 30, -1, 1, 30, 0,TMath::TwoPi());
+
+  hname = "SpCand_UE_Pt";
+  htitle = hname + ";p_{T} (GeV/c) ;counts";
+  fHistManager.CreateTH1(hname,htitle,45,5,50);
+
+  hname = "fHistJetPt_Kaon_Pion";
+  htitle = hname + ";p_{T, Jet} (GeV/c) ;counts";
+  fHistManager.CreateTH1(hname,htitle,99,1,100);
+
 
   // TO DO - set other histograms
 
@@ -477,7 +506,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
 
   // Some settings (ignore for now - we may change this)
 
-  fMCContainer->SetSpecialPDG(fCandidatePDG);
+  fMCContainer->SetSpecialPDG(fCandidatePDG);  // -100
   fMCContainer->SetRejectedOriginMap(fRejectedOrigin);
   fMCContainer->SetAcceptedDecayMap(fAcceptedDecay);
   fMCContainer->SetRejectISR(fRejectISR);
@@ -741,9 +770,7 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
     if (D0Pt<12 && D0Pt>7) { fHistManager.FillTH1("ProjPion_R_Cut3",rD0); }
     if (D0Pt<12 && D0Pt>0) { fHistManager.FillTH1("ProjPion_R_Cut0",rD0);}
 }
-
    }
-
 
  } }
 
@@ -752,18 +779,30 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
   // Jet loop - loop over all reconstructed jets
   //
 
+  Double_t highestJetPt=0;
+  Double_t highestJetEta=0;
+  Double_t highestJetPhi=0;
+
   std::vector<fastjet::PseudoJet> jets_incl = fFastJetWrapper->GetInclusiveJets();
   for (auto jet : jets_incl) {
     Double_t ptJet = TMath::Sqrt(jet.px()*jet.px() + jet.py()*jet.py());
-    Printf("jet pt = %f",ptJet);
+    //Printf("jet pt = %f",ptJet);
 
     if (jet.pseudorapidity()<0.5 && jet.pseudorapidity()>-0.5) { fHistManager.FillTH1("fHistPtJet",ptJet); }
-    fHistManager.FillTH1("fHistEtaJet",jet.pseudorapidity());
+    fHistManager.FillTH1("fHistEtaJet",jet.pseudorapidity()); //eta?
     fHistManager.FillTH1("fHistPhiJet",jet.phi());
 
     Int_t nSpeCandiInJet = 0;
     Int_t nConstsInJet = 0;
     Int_t nLcBaryonsInJet=0;
+
+//Finding the leading jet
+
+    if (highestJetPt < ptJet) {
+      highestJetPt = ptJet;
+      highestJetEta=jet.pseudorapidity();
+      highestJetPhi=jet.phi();
+    }
 
     for (auto constituent : jet.constituents()) {
       Int_t iPart = constituent.user_index() - 100;
@@ -775,6 +814,8 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
       }
       nConstsInJet++;
       Printf("jet constituent - pdg = %i",part->PdgCode());
+      Int_t idmoth=part->GetMother();
+      printf("HHHHHHHHHHHHH the mother id is %i \n",idmoth);
       Double_t ptConstJet = part->Pt();
       Double_t dEta = (part->Eta() - jet.eta());
       Double_t dPhi = (part->Phi() - jet.phi());
@@ -787,11 +828,9 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
       fHistManager.FillTH2("fHistConstJet_ptConst_ptJet", ptConstJet, ptJet);
       fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_DR", ptConstJet, ptJet, dR);
       fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_Z", ptConstJet, ptJet, zConstJet);
-
 //The special PDG candidate
-
       Int_t SpecialCandidate= TMath::Abs(part->PdgCode());
-
+printf(">>>>>>The sp candiate is: %i \n ",SpecialCandidate);
       if ( SpecialCandidate == fCandidatePDG) {
         nSpeCandiInJet++;
         fHistManager.FillTH1("fHistSpeCandiJet_DR", dR);
@@ -799,18 +838,36 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
         fHistManager.FillTH2("fHistSpeCandiJet_ptSpeCandi_ptJet", ptConstJet, ptJet);
         fHistManager.FillTH3("fHistSpeCandiJet_ptSpeCandi_ptJet_DR", ptConstJet, ptJet, dR);
         fHistManager.FillTH3("fHistSpeCandiJet_ptSpeCandi_ptJet_Z", ptConstJet, ptJet, zConstJet);
+        //hist pt for d0
        }
       }
 
     fHistManager.FillTH1("fHistNConstInJet", nConstsInJet);
 
     if(nSpeCandiInJet>0) fHistManager.FillTH1("fHistNConstInSpeCandiJet", nConstsInJet);
+    if (jet.pseudorapidity()<0.5 && jet.pseudorapidity()>-0.5) { if(nSpeCandiInJet>0)  { fHistManager.FillTH1("fHistJetPt_SpeCandi_EtaCond",ptJet);} }
     if(nSpeCandiInJet>0) fHistManager.FillTH1("fHistJetPt_SpeCandi",ptJet);
-
-
   }
 
+//particle loop
 
+printf("The highestJetPt is %f \n",highestJetPt);
+
+  for(auto part : itpart) {
+  if ( TMath::Abs(part.second->PdgCode()) == fCandidatePDG) {
+    Double_t DEta = (part.second->Eta() - highestJetEta);
+    Double_t DPhi = (part.second->Phi() - highestJetPhi);
+    Double_t R_SpCand = TMath::Sqrt(DEta*DEta+DPhi*DPhi);
+    printf(">>> R is = %f \n ",R_SpCand);
+    fHistManager.FillTH1("fLeadingJet_SpCand_R", R_SpCand); //for all pt ranges.
+    fHistManager.FillTH1("fLeadingJet_SpCand_DPhi",DPhi);
+    fHistManager.FillTH1("fLeadingJet_SpCand_DEta",DEta);
+    fHistManager.FillTH2("fLeadingJet_SpCand_DEta_DPhi",DEta,DPhi);
+    //UE events
+    if ((TMath::Pi())/4 <= TMath::Abs(DPhi) && TMath::Abs(DPhi) <= (TMath::Pi())*3/4) { fHistManager.FillTH1("SpCand_UE_Pt",part.second->Pt()); }
+
+    }
+}
 
 }
 
