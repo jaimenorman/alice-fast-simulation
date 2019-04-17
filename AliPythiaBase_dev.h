@@ -66,8 +66,3 @@ class AliPythiaBase_dev : public AliRndm
 };
 
 #endif
-
-
-
-
-
