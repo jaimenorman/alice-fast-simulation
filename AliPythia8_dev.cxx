@@ -92,6 +92,120 @@ void AliPythia8_dev::ProcInit(Process_t process, Float_t energy, Int_t strucfunc
     }
     break;
 
+  case kPyCharmColorHard:
+    Printf("colour hard set \n ");
+    ReadString("HardQCD:gg2ccbar = on"); // For test
+    ReadString("HardQCD:qqbar2ccbar = on"); // For test
+    ReadString("SoftQCD:nonDiffractive = on"); // without this line will not have sp candidate !!!
+    //mode 0
+    //ReadString("StringPT:sigma = 0.335");
+    //ReadString("StringZ:aLund = 0.36"); 
+    //ReadString("StringZ:bLund = 0.56");
+    //ReadString("StringFlav:probQQtoQ = 0.078");
+    //ReadString("StringFlav:probStoUD = 0.2");
+    //ReadString("StringFlav:probQQ1toQQ0join = 0.0275,0.0275,0.0275,0.0275");
+    //ReadString("MultiPartonInteractions:pT0Ref = 2.12");
+    //ReadString("BeamRemnants:remnantMode = 1");
+    //ReadString("BeamRemnants:saturation = 5");
+    //ReadString("ColourReconnection:mode = 1");
+  //  ReadString("ColourReconnection:allowDoubleJunRem = off");
+    //ReadString("ColourReconnection:m0 = 2.9");
+    //ReadString("ColourReconnection:allowJunctions = on");
+  //  ReadString("ColourReconnection:junctionCorrection = 1.43");
+  //  ReadString("ColourReconnection:timeDilationMode = 0");
+    //mode 2
+    ReadString("StringPT:sigma = 0.335");
+    ReadString("StringZ:aLund = 0.36");
+    ReadString("StringZ:bLund = 0.56");
+    ReadString("StringFlav:probQQtoQ = 0.078");
+    ReadString("StringFlav:probStoUD = 0.2");
+    ReadString("StringFlav:probQQ1toQQ0join = 0.0275,0.0275,0.0275,0.0275");
+    ReadString("MultiPartonInteractions:pT0Ref = 2.15");
+    ReadString("BeamRemnants:remnantMode = 1");
+    ReadString("BeamRemnants:saturation = 5");
+    ReadString("ColourReconnection:mode = 1");
+    ReadString("ColourReconnection:allowDoubleJunRem = off");
+    ReadString("ColourReconnection:m0 = 0.3");
+    ReadString("ColourReconnection:allowJunctions = on");
+    ReadString("ColourReconnection:junctionCorrection = 1.20");
+    ReadString("ColourReconnection:timeDilationMode = 2");
+    ReadString("ColourReconnection:timeDilationPar = 0.18");
+    //mode 3
+    //ReadString("StringPT:sigma = 0.335");
+    //ReadString("StringZ:aLund = 0.36");
+    //ReadString("StringZ:bLund = 0.56");
+    //ReadString("StringFlav:probQQtoQ = 0.078");
+    //ReadString("StringFlav:probStoUD = 0.2");
+    //ReadString("StringFlav:probQQ1toQQ0join = 0.0275,0.0275,0.0275,0.0275");
+    //ReadString("MultiPartonInteractions:pT0Ref = 2.05");
+    //ReadString("BeamRemnants:remnantMode = 1");
+    //ReadString("BeamRemnants:saturation = 5");
+    //ReadString("ColourReconnection:mode = 1");
+    //ReadString("ColourReconnection:allowDoubleJunRem = off");
+    //ReadString("ColourReconnection:m0 = 0.3");
+    //ReadString("ColourReconnection:allowJunctions = on");
+    //ReadString("ColourReconnection:junctionCorrection = 1.15");
+    //ReadString("ColourReconnection:timeDilationMode = 3");
+    //ReadString("ColourReconnection:timeDilationPar = 0.073");
+    break;
+
+  case kPyCharmColorSoft:
+    //ReadString("");
+    printf("Colour soft set \n");
+    ReadString("SoftQCD:all = on");
+    ReadString("SoftQCD:nonDiffractive = on"); //to be similar to "charm" proc.
+    //mode 0
+    ReadString("StringPT:sigma = 0.335");
+    ReadString("StringZ:aLund = 0.36");
+    ReadString("StringZ:bLund = 0.56");
+    ReadString("StringFlav:probQQtoQ = 0.078");
+    ReadString("StringFlav:probStoUD = 0.2");
+    ReadString("StringFlav:probQQ1toQQ0join = 0.0275,0.0275,0.0275,0.0275");
+    ReadString("MultiPartonInteractions:pT0Ref = 2.12");
+    ReadString("BeamRemnants:remnantMode = 1");
+    ReadString("BeamRemnants:saturation = 5");
+    ReadString("ColourReconnection:mode = 1");
+    ReadString("ColourReconnection:allowDoubleJunRem = off");
+    ReadString("ColourReconnection:m0 = 2.9");
+    ReadString("ColourReconnection:allowJunctions = on");
+    ReadString("ColourReconnection:junctionCorrection = 1.43");
+    ReadString("ColourReconnection:timeDilationMode = 0");
+    //mode 2
+    //ReadString("StringPT:sigma = 0.335");
+    //ReadString("StringZ:aLund = 0.36");
+    //ReadString("StringZ:bLund = 0.56");
+    //ReadString("StringFlav:probQQtoQ = 0.078");
+    //ReadString("StringFlav:probStoUD = 0.2");
+    //ReadString("StringFlav:probQQ1toQQ0join = 0.0275,0.0275,0.0275,0.0275");
+    //ReadString("MultiPartonInteractions:pT0Ref = 2.15");
+    //ReadString("BeamRemnants:remnantMode = 1");
+    //ReadString("BeamRemnants:saturation = 5");
+    //ReadString("ColourReconnection:mode = 1");
+    //ReadString("ColourReconnection:allowDoubleJunRem = off");
+    //ReadString("ColourReconnection:m0 = 0.3");
+    //ReadString("ColourReconnection:allowJunctions = on");
+    //ReadString("ColourReconnection:junctionCorrection = 1.20");
+    //ReadString("ColourReconnection:timeDilationMode = 2");
+    //ReadString("ColourReconnection:timeDilationPar = 0.18");
+    //mode 3
+    //ReadString("StringPT:sigma = 0.335");
+    //ReadString("StringZ:aLund = 0.36");
+    //ReadString("StringZ:bLund = 0.56");
+    //ReadString("StringFlav:probQQtoQ = 0.078");
+    //ReadString("StringFlav:probStoUD = 0.2");
+    //ReadString("StringFlav:probQQ1toQQ0join = 0.0275,0.0275,0.0275,0.0275");
+    //ReadString("MultiPartonInteractions:pT0Ref = 2.05");
+    //ReadString("BeamRemnants:remnantMode = 1");
+    //ReadString("BeamRemnants:saturation = 5");
+    //ReadString("ColourReconnection:mode = 1");
+    //ReadString("ColourReconnection:allowDoubleJunRem = off");
+    //ReadString("ColourReconnection:m0 = 0.3");
+    //ReadString("ColourReconnection:allowJunctions = on");
+    //ReadString("ColourReconnection:junctionCorrection = 1.15");
+    //ReadString("ColourReconnection:timeDilationMode = 3");
+    //ReadString("ColourReconnection:timeDilationPar = 0.073");
+    break;
+
   default:
     AliWarningStream() << "Process '" << process << "' not implemented!!" << std::endl;
     break;
