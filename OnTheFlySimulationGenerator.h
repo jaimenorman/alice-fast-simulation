@@ -9,7 +9,7 @@
 #include "AliGenExtFile_dev.h"
 
 #include <TString.h>
-#include <PythiaProcesses.h>
+#include "PythiaProcess_dev.h"
 #include <AliDecayer.h>
 #include <THistManager.h>
 
