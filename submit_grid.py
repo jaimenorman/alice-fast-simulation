@@ -311,8 +311,8 @@ def SubmitProcessingJobs(TrainName, LocalPath, AlienPath, AliPhysicsVersion, Off
                    "AliPythia8_dev.h", "AliPythia8_dev.cxx",
                    "AliPythiaBase_dev.h", "AliPythiaBase_dev.cxx",
                    "THepMCParser_dev.h", "THepMCParser_dev.cxx",
-                   "AliAnalysisTaskCharmHadronJets.h", "AliAnalysisTaskCharmHadronJets.cxx"]
-    
+                   "AliAnalysisTaskCharmHadronJets.h", "AliAnalysisTaskCharmHadronJets.cxx","PythiaProcess_dev.h"]
+
     Packages = "\"VO_ALICE@Python-modules::1.0-12\",\n"
     if not LoadPackagesSeparately:
         Packages += "\"VO_ALICE@AliPhysics::{aliphysics}\",\n".format(aliphysics=AliPhysicsVersion)
