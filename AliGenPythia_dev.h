@@ -31,7 +31,7 @@
 #include <vector>
 #include <set>
 
-#include <PythiaProcesses.h>
+#include "PythiaProcess_dev.h"
 #include <AliStructFuncType.h>
 #include <AliGenMC.h>
 
@@ -54,8 +54,8 @@ public:
     // PYTHIA 8 tunes:
     kMonash2013  = 14
   };
-  
-  
+
+
   AliGenPythia_dev();
   AliGenPythia_dev(AliPythiaBase_dev* pythia);
   virtual ~AliGenPythia_dev() {;}
@@ -69,7 +69,7 @@ public:
   virtual void    SetTune(EPythiaTune_t itune)                           { fItune        = itune   ; }
   virtual void    SetPDF(StrucFunc_t func)                               { fStrucFunc    = func    ; }
   virtual void    SetLHEFile(const char* fname)                          { fLHEFile      = fname   ; }
-  
+
   // Rewieght pt, hard spectrum with pT/p0^n, set power n
   virtual void    SetWeightPower(Float_t power)                          { fWeightPower  = power   ; }
   virtual void    SetPtHard(Float_t ptmin, Float_t ptmax)                { fPtHardMin    = ptmin   ; fPtHardMax = ptmax; }
