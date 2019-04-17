@@ -20,6 +20,7 @@
 #include <Pythia8/Analysis.h>
 
 #include "AliPythia8_dev.h"
+#include "PythiaProcess_dev.h"
 
 ClassImp(AliPythia8_dev)
 
