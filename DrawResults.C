@@ -22,8 +22,8 @@ void drawresults(TString fname = "")
   TFile *f = new TFile(fname.Data());
 
   // get lists containing histograms
-  TList	*l = (TList*)f->Get("AliAnalysisTaskCharmHadronJets_histos");
-  THashList	*l2 = (THashList*)l->FindObject("histosAliAnalysisTaskCharmHadronJets");
+  TList	*l = (TList*)f->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l2 = (THashList*)l->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
 
   // get histograms
 
@@ -260,8 +260,10 @@ zLc->Scale(1./ zLc->Integral("width"));
 void DrawResults1(TString fname1 = "",TString fname2 = "") {
   // get file
   //TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
+
   TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1554121250/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root");
   TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/AnalysisResults_FastSim_pythia8_charm_ColorHard_1554883740.root");
+
   //TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/AnalysisResults_FastSim_pythia8_charm_ColorHard_1554409872.root");
   //TFile *f1 = new TFile(fname1.Data());
   //TFile *f2 = new TFile(fname2.Data());
@@ -470,7 +472,7 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
   THashList	*l2_2 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
   // get histograms
 
-  TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_SpeCandi");
+  TH1F	*fJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_SpeCandi"); // try to use the eta cond! is not it is -1.5 to 1.5
   TH1F	*fJetPt2 = (TH1F*)l2_2->FindObject("fHistJetPt_SpeCandi");
 
   //TH1F	*fLcJetPt1 = (TH1F*)l2_1->FindObject("fHistJetPt_Lc");
@@ -492,9 +494,8 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
   k1 = FindingK(k1,fname1);
   k2 = FindingK(k2,fname2);
 
-  fJetPt1->Scale(k1);
-  fJetPt2->Scale(k2);
-//1/3??
+  fJetPt1->Scale(k1/3);
+  fJetPt2->Scale(k2/3); // the eta window is between -1.5 and 1.5 !!!
 
   //fLcJetPt1->Scale(k1);
   //fLcJetPt2->Scale(k2);
@@ -599,4 +600,155 @@ void DrawResults() {
   DrawResults1(fname1,fname2);
   CrossSection1(fname1,fname2);
   CrossSection2(fname1,fname2);
+}
+
+// for inclusive particles
+void ModeComparison(TString fname1 = "",TString fname2 = "")
+{
+
+  TFile *f1 = new TFile(fname1.Data()); //mode1
+  TFile *f2 = new TFile(fname2.Data()); //mode2
+  TFile *f3 = new TFile("lcd0_pythia8_all.root");//pythia8 reference
+  TFile *f4 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
+
+
+  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l1_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l2 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l2_1 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l4 = (TList*)f4->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l4_1 = (THashList*)l4->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+//mode 1
+  TH1F *fD0_pt1 = (TH1F*)l1_1->FindObject("fD0Pt");
+  TH1F *fLc_pt1 = (TH1F*)l1_1->FindObject("fLcPt");
+//mode 2
+  TH1F *fD0_pt2 = (TH1F*)l2_1->FindObject("fD0Pt");
+  TH1F *fLc_pt2 = (TH1F*)l2_1->FindObject("fLcPt");
+// ref without mode
+  TH1F *lcd0 = (TH1F*)f3->Get("h_lcd0_monash");
+  //ref for Pythia6
+  TH1F *fD0_pt4 = (TH1F*)l4_1->FindObject("fD0Pt");
+  TH1F *fLc_pt4 = (TH1F*)l4_1->FindObject("fLcPt");
+
+  TCanvas *c2 = new TCanvas("c2","c2",800,600);
+  c2->Divide(1,1);
+  gStyle->SetOptStat(0);
+  auto legend = new TLegend(0.1,0.7,0.48,0.9);
+
+  c2->cd(1);
+    fLc_pt1->Divide(fD0_pt1);
+    fLc_pt1->Draw("");//C
+
+    fLc_pt2->Divide(fD0_pt2);
+    fLc_pt2->Draw("SAME");
+    fLc_pt2->SetLineColor(6);
+
+    lcd0->Draw("SAME");
+
+    fLc_pt4->Divide(fD0_pt4);
+    fLc_pt4->Draw("SAME");
+    fLc_pt4->SetLineColor(30);
+
+    legend->AddEntry(fLc_pt1," Pythia8_charm_ColorSoft mode1","l");
+    legend->AddEntry(fLc_pt2," Pythia8_charm_ColorHard mode1","l");
+    legend->AddEntry(lcd0," Ref: Pythia8 ","l");
+    legend->AddEntry(fLc_pt4," Pythia6 charm ","l");
+    legend->Draw();
+}
+//AnalysisResults_FastSim_pythia8_charm_ColorHard_1554883740.root
+//AnalysisResults_FastSim_pythia8_charm_ColorSoft_1554562536.root
+
+//ModeComparision("AnalysisResults_FastSim_pythia8_charm_ColorSoft_1554562536.root","AnalysisResults_FastSim_pythia8_charm_ColorHard_1554883740.root")
+
+
+void MCZ(TString fname1 = "",TString fname2 = "")
+{
+  TFile *f1 = new TFile(fname1.Data()); //mode1
+  TFile *f2 = new TFile(fname2.Data()); //mode2
+  TFile *f3 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
+  TFile *f4 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1554121250/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root");
+
+
+  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l1_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l2 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l2_1 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l3 = (TList*)f3->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l3_1 = (THashList*)l3->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l4 = (TList*)f4->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l4_1 = (THashList*)l4->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  //mode 1
+    TH1F *fD0_Z1 = (TH1F*)l1_1->FindObject("fZ_D0");
+    TH1F *fLc_Z1 = (TH1F*)l1_1->FindObject("fZ_Lc");
+  //mode 2
+    TH1F *fD0_Z2 = (TH1F*)l2_1->FindObject("fZ_D0");
+    TH1F *fLc_Z2 = (TH1F*)l2_1->FindObject("fZ_Lc");
+//pythia6 ref
+    TH1F *fD0_Z3 = (TH1F*)l3_1->FindObject("fZ_D0");
+    TH1F *fLc_Z3 = (TH1F*)l3_1->FindObject("fZ_Lc");
+//pythia8 ref
+    TH1F *fD0_Z4 = (TH1F*)l4_1->FindObject("fZ_D0");
+    TH1F *fLc_Z4 = (TH1F*)l4_1->FindObject("fZ_Lc");
+
+
+    TH1F *fD0Z1 = (TH1F*) fD0_Z1->Clone();
+    TH1F *fLcZ1 = (TH1F*) fLc_Z1->Clone();
+    TH1F *fD0Z2 = (TH1F*) fD0_Z2->Clone();
+    TH1F *fLcZ2 = (TH1F*) fLc_Z2->Clone();
+
+
+    TCanvas *c2 = new TCanvas("c2","c2",800,600);
+    c2->Divide(1,1);
+    TCanvas *c3 = new TCanvas("c3","c3",800,600);
+    c3->Divide(2,1);
+
+
+    gStyle->SetOptStat(0);
+    auto legend = new TLegend(0.1,0.7,0.48,0.9);
+    auto legend1 = new TLegend(0.1,0.7,0.48,0.9);
+    auto legend2 = new TLegend(0.1,0.7,0.48,0.9);
+
+    c3->cd(1);
+      fLc_Z1->Draw("");
+      fD0_Z1->Draw("SAME");
+      fD0_Z1->SetLineColor(6);
+      legend1->AddEntry(fLc_Z1," Pythia8_charm_ColorSoft mode1","l");
+      legend1->Draw();
+
+    c3->cd(2);
+      fLc_Z2->Draw("");
+      fD0_Z2->Draw("SAME");
+      fD0_Z2->SetLineColor(6);
+      legend2->AddEntry(fLc_Z2," Pythia8_charm_ColorHard mode1","l");
+      legend2->Draw();
+
+    c2->cd(1);
+      fLcZ1->Divide(fD0Z1);
+      fLcZ1->Draw("");//C
+
+      fLcZ2->Divide(fD0Z2);
+      fLcZ2->Draw("SAME");
+      fLcZ2->SetLineColor(6);
+
+      fLc_Z3->Divide(fD0_Z3);
+      fLc_Z3->Draw("SAME");
+      fLc_Z3->SetLineColor(30);
+
+      fLc_Z4->Divide(fD0_Z4);
+      fLc_Z4->Draw("SAME");
+      fLc_Z4->SetLineColor(34);
+
+      legend->AddEntry(fLcZ1," Pythia8_charm_ColorSoft mode1","l");
+      legend->AddEntry(fLcZ2," Pythia8_charm_ColorHard mode1","l");
+      legend->AddEntry(fLc_Z3," Pythia6 charm ","l");
+      legend->AddEntry(fLc_Z4," Pythia8 charm ","l");
+      legend->Draw();
+
 }
