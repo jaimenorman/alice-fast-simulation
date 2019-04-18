@@ -16,6 +16,7 @@
 
 #include "HepMC/IO_GenEvent.h"
 #include "THepMCParser_dev.h"
+#include "PythiaProcess_dev.h"
 
 THepMCParser_dev::THepMCParser_dev(const char * infile) : 
   fTree(0)

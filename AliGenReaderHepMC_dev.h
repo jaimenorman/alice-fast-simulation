@@ -11,6 +11,7 @@
 
 #include <AliGenEventHeader.h>
 #include <AliGenReader.h>
+#include "PythiaProcess_dev.h"
 
 #if !(defined(__CINT__) || defined(__MAKECINT__) || defined(__CLING__))
 namespace HepMC {

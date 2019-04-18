@@ -23,6 +23,7 @@
 #include <AliStructFuncType.h>
 
 #include "AliPythia6_dev.h"
+#include "PythiaProcess_dev.h"
 
 ClassImp(AliPythia6_dev)
 
@@ -107,7 +108,7 @@ void AliPythia6_dev::Pytune(int itune)
   pytune(itune);
 }
 
-void AliPythia6_dev::ProcInit(Process_t process, Float_t energy, Int_t strucfunc, Int_t itune)
+void AliPythia6_dev::ProcInit(ProcessMy_t process, Float_t energy, Int_t strucfunc, Int_t itune)
 {
   // Initialise the process to generate
   if (!AliPythiaRndm::GetPythiaRandom()) AliPythiaRndm::SetPythiaRandom(GetRandom());

@@ -34,9 +34,9 @@ void runJetSimulation(TString name, Int_t pythiaEvents, TString procStr, TString
     }
   }
 
-  Process_t proc = kPyMbDefault;
-  //Process_t proc = kPyCharmColorSoft;
-  //Process_t proc = kPyCharmColorHard;
+  ProcessMy_t proc = kPyMbDefault;
+  //ProcessMy_t proc = kPyCharmColorSoft;
+  //ProcessMy_t proc = kPyCharmColorHard;
 
   OnTheFlySimulationGenerator::ESpecialParticle_t specialPart = OnTheFlySimulationGenerator::kNoSpecialParticle;
   OnTheFlySimulationGenerator::EGenerator_t partonEvent = OnTheFlySimulationGenerator::kPythia6;

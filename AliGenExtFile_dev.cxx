@@ -43,6 +43,7 @@
 #include <TTree.h>
 
 #include "AliGenExtFile_dev.h"
+#include "PythiaProcess_dev.h"
 
 ClassImp(AliGenExtFile_dev)
 

@@ -31,6 +31,7 @@
 #include "AliPythiaBase_dev.h"
 
 #include "AliGenPythia_dev.h"
+#include "PythiaProcess_dev.h"
 
 /// \cond CLASSIMP
 ClassImp(AliGenPythia_dev);

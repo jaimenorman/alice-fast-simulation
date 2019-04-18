@@ -65,7 +65,7 @@ public:
   virtual void    Init();
   virtual void    SetSeed(UInt_t seed);
 
-  virtual void    SetProcess(Process_t proc)                             { fProcess      = proc    ; }
+  virtual void    SetProcess(ProcessMy_t proc)                             { fProcess      = proc    ; }
   virtual void    SetTune(EPythiaTune_t itune)                           { fItune        = itune   ; }
   virtual void    SetPDF(StrucFunc_t func)                               { fStrucFunc    = func    ; }
   virtual void    SetLHEFile(const char* fname)                          { fLHEFile      = fname   ; }
@@ -106,7 +106,7 @@ protected:
 
   inline static Int_t GetFlavor(Int_t pdg) { return Int_t(pdg / TMath::Power(10, Int_t(TMath::Log10(pdg)))); }
 
-  Process_t                fProcess              ; ///<  Process type
+  ProcessMy_t                fProcess              ; ///<  Process type
   EPythiaTune_t            fItune                ; ///<  Pythia tune > 6.4
   Int_t                    fStrucFunc            ; ///<  Structure Function
   Float_t                  fWeightPower          ; ///<  Power for cross section weights; 0 means no reweighting

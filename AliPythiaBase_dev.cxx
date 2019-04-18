@@ -18,6 +18,7 @@
 #include <AliLog.h>
 
 #include "AliPythiaBase_dev.h"
+#include "PythiaProcess_dev.h"
 
 ClassImp(AliPythiaBase_dev)
 

@@ -43,11 +43,11 @@ public:
 
   OnTheFlySimulationGenerator();
   OnTheFlySimulationGenerator(TString taskname);
-  OnTheFlySimulationGenerator(TString taskname, Int_t numevents, Process_t proc, ESpecialParticle_t specialPart, Bool_t forceHadDecay, Int_t seed, TString lhe, TString hep);
+  OnTheFlySimulationGenerator(TString taskname, Int_t numevents, ProcessMy_t proc, ESpecialParticle_t specialPart, Bool_t forceHadDecay, Int_t seed, TString lhe, TString hep);
 
   void SetName(TString taskname)                          { fName            = taskname      ; }
   void SetNumberOfEvents(Int_t numevents)                 { fEvents          = numevents     ; }
-  void SetProcess(Process_t proc)                         { fProcess         = proc          ; }
+  void SetProcess(ProcessMy_t proc)                         { fProcess         = proc          ; }
   void SetSpecialParticle(ESpecialParticle_t specialPart) { fSpecialParticle = specialPart   ; }
   void SetSeed(Int_t seed)                                { fSeed            = seed          ; }
   void SetLHEFile(TString lhe)                            { fLHEFile         = lhe           ; }
@@ -68,8 +68,8 @@ public:
   void SetDecayer(EGenerator_t gen)                       { fDecayer         = gen           ; }
   void SetExtendedEventInfo(Bool_t b)                     { fExtendedEventInfo = b           ; }
 
-  static AliGenPythia_dev* CreatePythia6Gen(EBeamType_t beam, Float_t e_cms, EGenerator_t partonEvent, TString lhe, EPythiaTune_t tune, Process_t proc, ESpecialParticle_t specialPart, Double_t ptHardMin, Double_t ptHardMax);
-  static AliGenPythia_dev* CreatePythia8Gen(EBeamType_t beam, Float_t e_cms, EGenerator_t partonEvent, TString lhe, EPythiaTune_t tune, Process_t proc, ESpecialParticle_t specialPart, Double_t ptHardMin, Double_t ptHardMax);
+  static AliGenPythia_dev* CreatePythia6Gen(EBeamType_t beam, Float_t e_cms, EGenerator_t partonEvent, TString lhe, EPythiaTune_t tune, ProcessMy_t proc, ESpecialParticle_t specialPart, Double_t ptHardMin, Double_t ptHardMax);
+  static AliGenPythia_dev* CreatePythia8Gen(EBeamType_t beam, Float_t e_cms, EGenerator_t partonEvent, TString lhe, EPythiaTune_t tune, ProcessMy_t proc, ESpecialParticle_t specialPart, Double_t ptHardMin, Double_t ptHardMax);
   static AliGenExtFile_dev* CreateHerwig7Gen(EBeamType_t beam, Float_t e_cms, TString hep, ESpecialParticle_t specialPart);
   static AliGenEvtGen_dev* CreateEvtGen(AliGenEvtGen_dev::DecayOff_t decayOff);
 
@@ -81,7 +81,7 @@ public:
 
   const TString&     GetName()               const { return fName           ; }
   Int_t              GetNumberOfEvents()     const { return fEvents         ; }
-  Process_t          GetProcess()            const { return fProcess        ; }
+  ProcessMy_t          GetProcess()            const { return fProcess        ; }
   ESpecialParticle_t GetSpecialParticle()    const { return fSpecialParticle; }
   Int_t              GetSeed()               const { return fSeed           ; }
   const TString&     GetLHEFile()            const { return fLHEFile        ; }
@@ -104,7 +104,7 @@ protected:
   TString              fName             ;
   AliAnalysisManager*  fAnalysisManager  ;
   Int_t                fEvents           ;
-  Process_t            fProcess          ;
+  ProcessMy_t            fProcess          ;
   ESpecialParticle_t   fSpecialParticle  ;
   Int_t                fSeed             ;
   TString              fLHEFile          ;

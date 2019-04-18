@@ -39,7 +39,7 @@ AliPythia8_dev::AliPythia8_dev():
   if (!AliPythiaRndm::GetPythiaRandom()) AliPythiaRndm::SetPythiaRandom(GetRandom());
 }
 
-void AliPythia8_dev::ProcInit(Process_t process, Float_t energy, Int_t strucfunc, Int_t tune)
+void AliPythia8_dev::ProcInit(ProcessMy_t process, Float_t energy, Int_t strucfunc, Int_t tune)
 {
   // Initialise the process to generate
   if (!AliPythiaRndm::GetPythiaRandom())

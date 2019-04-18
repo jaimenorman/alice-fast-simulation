@@ -13,6 +13,7 @@
 
 #include "THepMCParser_dev.h"
 #include "AliGenReaderHepMC_dev.h"
+#include "PythiaProcess_dev.h"
 
 ClassImp(AliGenReaderHepMC_dev)
 

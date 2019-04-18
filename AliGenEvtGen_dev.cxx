@@ -33,6 +33,7 @@
 #include <memory>
 
 #include "AliGenEvtGen_dev.h"
+#include "PythiaProcess_dev.h"
 
 ClassImp(AliGenEvtGen_dev)
 ///////////////////////////////////////////////////////////////////////////

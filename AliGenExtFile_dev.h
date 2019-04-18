@@ -8,6 +8,7 @@
 // Author: andreas.morsch@cern.ch
 
 #include <AliGenMC.h>
+#include "PythiaProcess_dev.h"
 
 class AliGenReader;
 class TTree;

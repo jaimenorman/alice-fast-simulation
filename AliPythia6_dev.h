@@ -5,6 +5,7 @@
 
 #include <TPythia6.h>
 #include "AliPythiaBase_dev.h"
+#include "PythiaProcess_dev.h"
 
 class AliStack;
 
@@ -22,7 +23,7 @@ public:
   virtual Int_t CheckedLuComp(Int_t kf);
 
   // Pythia initialisation for selected processes
-  virtual void ProcInit(Process_t process, Float_t energy, Int_t strucfunc, Int_t tune);
+  virtual void ProcInit(ProcessMy_t process, Float_t energy, Int_t strucfunc, Int_t tune);
 
   virtual void  GenerateEvent();
   virtual Int_t GetNumberOfParticles() { return GetN(); }
@@ -63,7 +64,7 @@ public:
   virtual void Pyshow(Int_t ip1, Int_t ip2, Double_t qmax);
 
 protected:
-  Process_t             fProcess;            ///< Process type
+  ProcessMy_t             fProcess;            ///< Process type
   Int_t                 fItune;              ///< Tune
   Float_t               fEcms;               ///< Centre of mass energy
   Int_t                 fStrucFunc;          ///< Structure function

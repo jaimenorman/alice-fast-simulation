@@ -13,6 +13,7 @@
 
 #include <AliGenerator.h>
 #include <AliDecayerEvtGen.h>
+#include "PythiaProcess_dev.h"
 
 class TParticle;
 

@@ -6,6 +6,7 @@
 #include "AliPythiaBase_dev.h"
 #include "AliTPythia8.h"
 #include <AliStructFuncType.h>
+#include "PythiaProcess_dev.h"
 
 class AliPythia8_dev : public AliTPythia8, public AliPythiaBase_dev
 {
@@ -20,7 +21,7 @@ class AliPythia8_dev : public AliTPythia8, public AliPythiaBase_dev
     virtual Int_t CheckedLuComp(Int_t /*kf*/) {return -1;}
 
     // Pythia initialisation for selected processes
-    virtual void  ProcInit (Process_t process, Float_t energy, Int_t strucfunc, Int_t tune);
+    virtual void  ProcInit (ProcessMy_t process, Float_t energy, Int_t strucfunc, Int_t tune);
 
     virtual void  SetSeed(UInt_t seed);
     virtual void  GenerateEvent();
@@ -59,7 +60,7 @@ class AliPythia8_dev : public AliTPythia8, public AliPythiaBase_dev
  protected:
     static Int_t PYTHIA8PDFsetName(StrucFunc_t s);
 
-    Process_t             fProcess;           // Process type
+    ProcessMy_t             fProcess;           // Process type
     Int_t                 fItune;
     Float_t               fEcms;              // Centre of mass energy
     Int_t                 fStrucFunc;         // Structure function
