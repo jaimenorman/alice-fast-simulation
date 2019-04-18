@@ -13,10 +13,16 @@
 #include <TH1.h>
 using namespace std;
 
+
+void SetStyle();
+void SetStyleHisto(TH1 *h);
+
 //R
 void drawresults(TString fname = "")
 
 {
+
+  SetStyle();
 
   // get file
   TFile *f = new TFile(fname.Data());
@@ -54,11 +60,11 @@ void drawresults(TString fname = "")
   TH1F *zLc=(TH1F*)l2->FindObject("fZ_Lc");
 
 
-  TCanvas *c1 = new TCanvas("c1","c1",800,600);
-  TCanvas *c2 = new TCanvas("c2","c2",800,600);
-  TCanvas *c3 = new TCanvas("c3","c3",800,600);
-  TCanvas *c4 = new TCanvas("c4","c4",800,600);
-  TCanvas *c5 = new TCanvas("c5","c5",800,600);
+  TCanvas *c1 = new TCanvas("c1","c1",1000,600);
+  TCanvas *c2 = new TCanvas("c2","c2",1000,600);
+  TCanvas *c3 = new TCanvas("c3","c3",1000,600);
+  TCanvas *c4 = new TCanvas("c4","c4",1000,600);
+  TCanvas *c5 = new TCanvas("c5","c5",1000,600);
 
   c1->Divide(1,1);
   c2->Divide(1,1);
@@ -69,10 +75,10 @@ void drawresults(TString fname = "")
   gStyle->SetOptStat(0);
 
 
-auto legend = new TLegend(0.1,0.7,0.48,0.9);
-auto legend1 = new TLegend(0.1,0.7,0.48,0.9);
-auto legend2 = new TLegend(0.1,0.7,0.48,0.9);
-auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
+auto legend = new TLegend(0.35,0.60,0.85,0.85);
+auto legend1 = new TLegend(0.35,0.65,0.85,0.9);
+auto legend2 = new TLegend(0.35,0.65,0.85,0.9);
+auto legend3 = new TLegend(0.35,0.65,0.85,0.9);
 
 //  c1->cd(1);
   //fMothLcPt->Divide(fDaughLcPt);
@@ -83,9 +89,11 @@ auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
   TH1D* Proj_R_Cut1 = fRPt->ProjectionX("fRPt",0,1,"");
 
   c1->cd(1);
+  SetStyleHisto(Proj_R_Cut1);
   Proj_R_Cut1->Draw();
 
   c2->cd(1);
+  SetStyleHisto(fhLc_pt);
   fhLc_pt->Divide(fhD0_pt);
   fhLc_pt->Draw();
 
@@ -97,6 +105,8 @@ auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
   //fRPt->SetLineColor(6);
 
   //KaonC1->Sumw2();
+  SetStyleHisto(KaonC1);
+  KaonC1->GetXaxis()->SetTitle("angle between D^{0} and Kaon daughter");
   KaonC1->Draw("SAME");
   KaonC1->SetLineWidth(2);
   KaonC1->SetLineColor(4);
@@ -126,11 +136,13 @@ auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
   meankaonc3=KaonC3->GetMean();
   sigkaonc3=KaonC3->GetRMS();
 
-  legend->AddEntry(KaonC1,TString::Format("#splitline{0<Pt<3}{Mean = %f RMS = %f} ",meankaonc1,sigkaonc1),"l");
-  legend->AddEntry(KaonC2,TString::Format("#splitline{3<Pt<7}{Mean = %f RMS = %f} ",meankaonc2,sigkaonc2),"l");
-  legend->AddEntry(KaonC3,TString::Format("#splitline{7<Pt<12}{Mean = %f RMS = %f} ",meankaonc3,sigkaonc3),"l");
+  legend->AddEntry(KaonC1,TString::Format("#splitline{0 < p_{T} < 3 GeV/c}{Mean = %.2f RMS = %.2f} ",meankaonc1,sigkaonc1),"l");
+  legend->AddEntry(KaonC2,TString::Format("#splitline{3 < p_{T} < 7 GeV/c}{Mean = %.2f RMS = %.2f} ",meankaonc2,sigkaonc2),"l");
+  legend->AddEntry(KaonC3,TString::Format("#splitline{7 < p_{T} < 12 GeV/c}{Mean = %.2f RMS = %.2f} ",meankaonc3,sigkaonc3),"l");
   legend->Draw();
 
+  TLatex info; info.SetNDC(); info.SetTextFont(43); info.SetTextSize(18);
+  info.DrawLatex(0.40, 0.86, "PYTHIA8, |#eta_{D0}| < 1");
 
   c3->cd(2);
 
@@ -140,6 +152,7 @@ auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
   //fRPt1->SetLineColor(40);
 
   //PionC1->Sumw2();
+  SetStyleHisto(PionC1);
   PionC1->Draw("SAME");
   PionC1->SetLineWidth(2);
   PionC1->SetLineColor(4);
@@ -169,9 +182,9 @@ auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
   meanpionc3=PionC3->GetMean();
   sigpionc3=PionC3->GetRMS();
 
-  legend1->AddEntry(PionC1,TString::Format("#splitline{0<Pt<3}{Mean = %f RMS = %f} ",meanpionc1,sigpionc1),"l");
-  legend1->AddEntry(PionC2,TString::Format("#splitline{3<Pt<7}{Mean = %f RMS = %f} ",meanpionc2,sigpionc2),"l");
-  legend1->AddEntry(PionC3,TString::Format("#splitline{7<Pt<12}{Mean = %f RMS = %f} ",meanpionc3,sigpionc3),"l");
+  legend1->AddEntry(PionC1,TString::Format("#splitline{0 < p_{T} < 3 GeV/c}{Mean = %.2f RMS = %.2f} ",meanpionc1,sigpionc1),"l");
+  legend1->AddEntry(PionC2,TString::Format("#splitline{3 < p_{T} < 7 GeV/c}{Mean = %.2f RMS = %.2f} ",meanpionc2,sigpionc2),"l");
+  legend1->AddEntry(PionC3,TString::Format("#splitline{7 < p_{T} < 12 GeV/c}{Mean = %.2f RMS = %.2f} ",meanpionc3,sigpionc3),"l");
   legend1->Draw();
 
 //legend->AddEntry("f1","Function abs(#frac{sin(x)}{x})","l");
@@ -179,6 +192,7 @@ auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
 
 c4->cd(1);
 //LcKaonC1->Sumw2();
+  SetStyleHisto(LcKaonC1);
 LcKaonC1->Draw();
 LcKaonC1->SetLineWidth(2);
 LcKaonC1->SetLineColor(4);
@@ -208,15 +222,15 @@ double_t meanLckaonc3, sigLckaonc3;
 meanLckaonc3=LcKaonC3->GetMean();
 sigLckaonc3=LcKaonC3->GetRMS();
 
-legend2->AddEntry(LcKaonC1,TString::Format("#splitline{0<Pt<3}{Mean = %f RMS = %f} ",meanLckaonc1,sigLckaonc1),"l");
-legend2->AddEntry(LcKaonC2,TString::Format("#splitline{3<Pt<7}{Mean = %f RMS = %f} ",meanLckaonc2,sigLckaonc2),"l");
-legend2->AddEntry(LcKaonC3,TString::Format("#splitline{7<Pt<12}{Mean = %f RMS = %f} ",meanLckaonc3,sigLckaonc3),"l");
-legend2->Draw();
-
+  legend2->AddEntry(LcKaonC1,TString::Format("#splitline{0 < p_{T} < 3 GeV/c}{Mean = %.2f RMS = %.2f} ",meanLckaonc1,sigLckaonc1),"l");
+  legend2->AddEntry(LcKaonC2,TString::Format("#splitline{3 < p_{T} < 7 GeV/c}{Mean = %.2f RMS = %.2f} ",meanLckaonc2,sigLckaonc2),"l");
+  legend2->AddEntry(LcKaonC3,TString::Format("#splitline{7 < p_{T} < 12 GeV/c}{Mean = %.2f RMS = %.2f} ",meanLckaonc3,sigLckaonc3),"l");
+  legend2->Draw();
 
 c4->cd(2);
 
 //LcPionC1->Sumw2();
+SetStyleHisto(LcPionC1);
 LcPionC1->Draw("SAME");
 LcPionC1->SetLineWidth(2);
 LcPionC1->SetLineColor(4);
@@ -248,16 +262,19 @@ legend3->Draw();
 
 
 c5->cd(1);
+SetStyleHisto(zD0);
 zD0->Draw();
 zD0->Scale(1. / zD0->Integral("width"));
 
 c5->cd(2);
+SetStyleHisto(zLc);
 zLc->Draw();
 zLc->Scale(1./ zLc->Integral("width"));
 
 }
 
 void DrawResults1(TString fname1 = "",TString fname2 = "") {
+  SetStyle();
   // get file
   //TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
 
@@ -346,6 +363,7 @@ printf("The value of CS_MB is %f and the number of evts is %f \n",CrosSecMB,Nevt
 
 //inclusive jet cross section
 void CrossSection1(TString fname1 = "", TString fname2 = "") {
+  SetStyle();
 
 //  TFile *f2 = TFile::Open(Form("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_mb_1553871816/stage_1/output/001/%s",fname2.Data()));
 
@@ -458,6 +476,7 @@ TGraph* gr = new TGraph(n,x1,yy1);
 
 //D0 meson (Lc Baryon) cross section
 void CrossSection2(TString fname1 = "", TString fname2 = "") {
+  SetStyle();
   // get file
   TFile *f1 = new TFile(fname1.Data());
   TFile *f2 = new TFile(fname2.Data());
@@ -549,6 +568,7 @@ void CrossSection2(TString fname1 = "", TString fname2 = "") {
 }
 
 void Z() {
+  SetStyle();
 
   TFile *f = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1554121250/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root");
 
@@ -588,14 +608,7 @@ void Z() {
 
 }
 
-void DrawResults() {
-
-  TString fname1, fname2;
-
-  cout << " fname1: ";
-  cin >> fname1;
-  cout << " fname2: ";
-  cin >> fname2;
+void DrawResults(TString fname1 = "", TString fname2 = "") {
 
   DrawResults1(fname1,fname2);
   CrossSection1(fname1,fname2);
@@ -750,5 +763,67 @@ void MCZ(TString fname1 = "",TString fname2 = "")
       legend->AddEntry(fLc_Z3," Pythia6 charm ","l");
       legend->AddEntry(fLc_Z4," Pythia8 charm ","l");
       legend->Draw();
+}
 
+void SetStyle() {
+  cout << "Setting style!" << endl;
+
+  gStyle->Reset("Plain");
+  gStyle->SetOptTitle(0);
+  //  gStyle->SetOptStat(0);
+  gStyle->SetPalette(1);
+  gStyle->SetCanvasColor(10);
+  //  gStyle->SetCanvasBorderMode(0);
+  //  gStyle->SetFrameLineWidth(1);
+  gStyle->SetFrameFillColor(kWhite);
+  gStyle->SetPadColor(10);
+  gStyle->SetPadTickX(1);
+  gStyle->SetPadTickY(1);
+  gStyle->SetPadBottomMargin(0.13);
+  gStyle->SetPadLeftMargin(0.15);
+  gStyle->SetPadTopMargin(0.07);
+  gStyle->SetPadRightMargin(0.10);
+  gStyle->SetHistLineWidth(2);
+  gStyle->SetHistLineColor(kRed);
+  gStyle->SetFuncWidth(2);
+  gStyle->SetFuncColor(kGreen);
+  //  gStyle->SetLineWidth(2);
+  gStyle->SetLabelSize(0.035,"xyz");
+  gStyle->SetLabelOffset(0.01,"y");
+  gStyle->SetLabelOffset(0.01,"x");
+  gStyle->SetLabelColor(kBlack,"xyz");
+  gStyle->SetTitleSize(0.055,"xyz");
+  gStyle->SetTitleOffset(1.3,"y");
+  gStyle->SetTitleOffset(1.15,"x");
+  gStyle->SetTitleFillColor(kWhite);
+  //  gStyle->SetTextSizePixels(30);
+  gStyle->SetTextFont(42);
+  gStyle->SetLegendBorderSize(0);
+  gStyle->SetLegendFillColor(kWhite);
+  gStyle->SetLegendFont(42);
+  //gStyle->SetLineWidth(2);
+
+  gROOT->ForceStyle();
+  // gStyle->SetMarkerStyle(20);
+  // gStyle->SetMarkerSize(1.2);
+  // gStyle->SetMarkerColor(kBlack);
+}
+
+
+void SetStyleHisto( TH1 *h){
+  
+  //h->SetLineColor(kBlack);
+  //h->SetLineWidth(2);
+  //h->GetYaxis()->SetLabelFont(42);
+  //h->GetYaxis()->SetTitleFont(42);
+  h->GetYaxis()->SetTitleSize(0.055);
+  h->GetYaxis()->SetTitleOffset(1.3);
+  h->GetYaxis()->SetLabelSize(0.05);
+  //h->GetYaxis()->SetNdivisions(507);
+  h->GetXaxis()->SetTitleFont(42);
+  h->GetXaxis()->SetLabelFont(42);
+  h->GetXaxis()->SetTitleSize(0.055);
+  h->GetXaxis()->SetTitleOffset(1.0);
+  h->GetXaxis()->SetLabelSize(0.05);
+  h->GetXaxis()->SetNdivisions(505);
 }
