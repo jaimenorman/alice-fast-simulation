@@ -399,7 +399,11 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname = "fLeadingJet_SpCand_DPhi";
   htitle = hname + ";D#phi_ ;counts ";
-  fHistManager.CreateTH1(hname,htitle,125,0,TMath::TwoPi());
+  fHistManager.CreateTH1(hname,htitle,150,-TMath::TwoPi(),TMath::TwoPi());
+
+  hname = "fLeadingJet_SpCand_DPhi_cond";
+  htitle = hname + ";D#phi_ ;counts ";
+  fHistManager.CreateTH1(hname,htitle,150,-TMath::TwoPi(),TMath::TwoPi());
 
   hname = "fLeadingJet_SpCand_DEta";
   htitle = hname +";D#eta_ ;counts ";
@@ -413,10 +417,13 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
   htitle = hname + ";p_{T} (GeV/c) ;counts";
   fHistManager.CreateTH1(hname,htitle,45,5,50);
 
-  hname = "fHistJetPt_Kaon_Pion";
-  htitle = hname + ";p_{T, Jet} (GeV/c) ;counts";
-  fHistManager.CreateTH1(hname,htitle,99,1,100);
+  hname = "LJ_SpCand_pt_inJet";
+  htitle = hname + ";p_{T,LJ} (GeV/c) ;p_{T,SpCand} (GeV/c) ;counts";
+  fHistManager.CreateTH2(hname,htitle,50,0,50,50,0,50);
 
+  hname = "LJ_SpCand_pt_UE";
+  htitle = hname + ";p_{T,LJ} (GeV/c) ;p_{T,SpCand} (GeV/c) ;counts";
+  fHistManager.CreateTH2(hname,htitle,50,0,50,50,0,50);
 
   // TO DO - set other histograms
 
@@ -600,7 +607,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
            if(!part1) {break;}
 		       moth=part1->GetPdgCode();
            idmother = part1->GetMother();
-		       printf("Lc - The PDG mother = %i \n", moth);
+		     //  printf("Lc - The PDG mother = %i \n", moth);
 		       //if ( TMath::Abs(moth) <= 6 ) //found quark
            if (moth==-6||moth==-5||moth==-4||moth==-3||moth==-2||moth==-1||moth==0||moth==1||moth==2||moth==3||moth==4||moth==5||moth==6)
            {
@@ -611,7 +618,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
              Double_t pcharm = part1->P();
              Double_t pLc =part.second->P();
              Double_t ZLc = pLc / pcharm ;
-             printf(" The fragmentation function is ZLc = %f \n",ZLc);
+          //   printf(" The fragmentation function is ZLc = %f \n",ZLc);
              //fHistManager.FillTH1("fMomentZ_Lc",TMath::Sqrt(part.first.Px()*part.first.Px()+part.first.Py()*part.first.Py()+part.first.Pz()*part.first.Pz())/TMath::Sqrt(part1->Px()*part1->Px()+part1->Py()*part1->Py()+part1->Pz()*part1->Pz()));
              fHistManager.FillTH1("fMomentZ_Lc",ZLc);}
 
@@ -624,7 +631,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
            icount++;
            if(icount>10) break;
 	       }
-         printf("reached end of Lc mother loop");
+        // printf("reached end of Lc mother loop");
          //Daughter
          UInt_t Ndaught = part.second->GetNDaughters();
         // if we want all the N daughters.
@@ -632,7 +639,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
            UInt_t iddaught = part.second->GetDaughterLabel(j);
            AliAODMCParticle* daught1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaught);
            UInt_t Pdgdaught1= daught1->GetPdgCode();
-           printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
+        //   printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
 
            // if Kaon daughter is detected:
               if (Pdgdaught1==311||Pdgdaught1==313||Pdgdaught1==321||Pdgdaught1==323||Pdgdaught1==-311||Pdgdaught1==-313||Pdgdaught1==-321||Pdgdaught1==-323)
@@ -701,7 +708,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
      printf("The Mother Pdg = %i \n", moth);
 
      if (moth==-6||moth==-5||moth==-4||moth==-3||moth==-2||moth==-1||moth==0||moth==1||moth==2||moth==3||moth==4||moth==5||moth==6)
-     { //printf("INSIDE THE LOOOOOOOOOOP1 \n ");
+     {
        if ( moth != 5 && moth != -5 ) { fHistManager.FillTH1("fD0PtCut2",part.second->Pt()); }
        if ( moth == 4 || moth == -4)
        { //Double_t pcharm = part1->P();
@@ -709,7 +716,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
          //Double_t pD0 =part.second->P();
          Double_t pD0 = TMath::Sqrt(part.first.Px()*part.first.Px()+part.first.Py()*part.first.Py()+part.first.Pz()*part.first.Pz());
          Double_t zD0 = pD0 / pcharm ;
-         printf(" The fragmentation function is zD0 =   %f for %i = %f and %i = %f \n",zD0,moth,pcharm,pdg,pD0);
+      //   printf(" The fragmentation function is zD0 =   %f for %i = %f and %i = %f \n",zD0,moth,pcharm,pdg,pD0);
          fHistManager.FillTH1("fMomentZ_D0",zD0);
        //fHistManager.FillTH1("fMomentZ_D0",TMath::Sqrt(part.first.Px()*part.first.Px()+part.first.Py()*part.first.Py()+part.first.Pz()*part.first.Pz())/TMath::Sqrt(part1->Px()*part1->Px()+part1->Py()*part1->Py()+part1->Pz()*part1->Pz()));
        fHistManager.FillTH1("fZ_D0",part.second->Pt()/part1->Pt());}
@@ -718,14 +725,14 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
      if ( moth == 2212 ) {break;}
 
 		 idmother = part1->GetMother();
-		 printf("D0 - The PDG mother = %i \n", moth);
+		// printf("D0 - The PDG mother = %i \n", moth);
 
 		 //if ( idmother < 0 ) { break; }
      icount++;
      if(icount>10) {break;}
 	 }
 
-   printf("reached end of D0 mother loop");
+   //printf("reached end of D0 mother loop");
 
    //Daughter
    UInt_t Ndaught = part.second->GetNDaughters();
@@ -785,8 +792,10 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
 
   std::vector<fastjet::PseudoJet> jets_incl = fFastJetWrapper->GetInclusiveJets();
   for (auto jet : jets_incl) {
+
     Double_t ptJet = TMath::Sqrt(jet.px()*jet.px() + jet.py()*jet.py());
     //Printf("jet pt = %f",ptJet);
+    if(jet.pseudorapidity() > 1 || jet.pseudorapidity() < -1  ) continue;
 
     if (jet.pseudorapidity()<0.5 && jet.pseudorapidity()>-0.5) { fHistManager.FillTH1("fHistPtJet",ptJet); }
     fHistManager.FillTH1("fHistEtaJet",jet.pseudorapidity()); //eta?
@@ -813,9 +822,9 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
         continue;
       }
       nConstsInJet++;
-      Printf("jet constituent - pdg = %i",part->PdgCode());
+    //  Printf("jet constituent - pdg = %i",part->PdgCode());
       Int_t idmoth=part->GetMother();
-      printf("HHHHHHHHHHHHH the mother id is %i \n",idmoth);
+    //  printf("HHHHHHHHHHHHH the mother id is %i \n",idmoth);
       Double_t ptConstJet = part->Pt();
       Double_t dEta = (part->Eta() - jet.eta());
       Double_t dPhi = (part->Phi() - jet.phi());
@@ -830,7 +839,7 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
       fHistManager.FillTH3("fHistConstJet_ptConst_ptJet_Z", ptConstJet, ptJet, zConstJet);
 //The special PDG candidate
       Int_t SpecialCandidate= TMath::Abs(part->PdgCode());
-printf(">>>>>>The sp candiate is: %i \n ",SpecialCandidate);
+//printf(">>>>>>The sp candiate is: %i \n ",SpecialCandidate);
       if ( SpecialCandidate == fCandidatePDG) {
         nSpeCandiInJet++;
         fHistManager.FillTH1("fHistSpeCandiJet_DR", dR);
@@ -845,24 +854,33 @@ printf(">>>>>>The sp candiate is: %i \n ",SpecialCandidate);
     fHistManager.FillTH1("fHistNConstInJet", nConstsInJet);
 
     if(nSpeCandiInJet>0) fHistManager.FillTH1("fHistNConstInSpeCandiJet", nConstsInJet);
-    if (jet.pseudorapidity()<0.5 && jet.pseudorapidity()>-0.5) { if(nSpeCandiInJet>0)  { fHistManager.FillTH1("fHistJetPt_SpeCandi_EtaCond",ptJet);} }
+    if (jet.pseudorapidity()<1 && jet.pseudorapidity()>-1) { if(nSpeCandiInJet>0)  { fHistManager.FillTH1("fHistJetPt_SpeCandi_EtaCond",ptJet);} }
     if(nSpeCandiInJet>0) fHistManager.FillTH1("fHistJetPt_SpeCandi",ptJet);
   }
 
 //particle loop
 
-printf("The highestJetPt is %f \n",highestJetPt);
+//printf("The highestJetPt is %f \n",highestJetPt);
 
   for(auto part : itpart) {
   if ( TMath::Abs(part.second->PdgCode()) == fCandidatePDG) {
+    if(part.second->Eta()>1 || part.second->Eta()<-1) continue;
+
     Double_t DEta = (part.second->Eta() - highestJetEta);
     Double_t DPhi = (part.second->Phi() - highestJetPhi);
     Double_t R_SpCand = TMath::Sqrt(DEta*DEta+DPhi*DPhi);
-    printf(">>> R is = %f \n ",R_SpCand);
+  //  printf(">>> R is = %f \n ",R_SpCand);
     fHistManager.FillTH1("fLeadingJet_SpCand_R", R_SpCand); //for all pt ranges.
     fHistManager.FillTH1("fLeadingJet_SpCand_DPhi",DPhi);
     fHistManager.FillTH1("fLeadingJet_SpCand_DEta",DEta);
     fHistManager.FillTH2("fLeadingJet_SpCand_DEta_DPhi",DEta,DPhi);
+
+    DPhi=TMath::Abs(DPhi);
+    if (DPhi<TMath::TwoPi() && DPhi>TMath::Pi()) {DPhi=DPhi-TMath::Pi();}
+    fHistManager.FillTH1("fLeadingJet_SpCand_DPhi_cond",DPhi);
+
+    if (R_SpCand<=0.4) { fHistManager.FillTH2("LJ_SpCand_pt_inJet",highestJetPt,part.second->Pt());}
+    if ((TMath::Pi())/4 <= TMath::Abs(DPhi) && TMath::Abs(DPhi) <= (TMath::Pi())*3/4) { fHistManager.FillTH2("LJ_SpCand_pt_UE",highestJetPt,part.second->Pt()); }
     //UE events
     if ((TMath::Pi())/4 <= TMath::Abs(DPhi) && TMath::Abs(DPhi) <= (TMath::Pi())*3/4) { fHistManager.FillTH1("SpCand_UE_Pt",part.second->Pt()); }
 
