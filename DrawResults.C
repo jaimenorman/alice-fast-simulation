@@ -75,7 +75,7 @@ void drawresults(TString fname = "")
   gStyle->SetOptStat(0);
 
 
-auto legend = new TLegend(0.35,0.60,0.85,0.85);
+auto legend = new TLegend(0.35,0.58,0.85,0.83);
 auto legend1 = new TLegend(0.35,0.65,0.85,0.9);
 auto legend2 = new TLegend(0.35,0.65,0.85,0.9);
 auto legend3 = new TLegend(0.35,0.65,0.85,0.9);
@@ -106,18 +106,19 @@ auto legend3 = new TLegend(0.35,0.65,0.85,0.9);
 
   //KaonC1->Sumw2();
   SetStyleHisto(KaonC1);
-  KaonC1->GetXaxis()->SetTitle("angle between D^{0} and Kaon daughter");
-  KaonC1->Draw("SAME");
+  KaonC1->GetXaxis()->SetTitle("R between D^{0} and Kaon daughter");
   KaonC1->SetLineWidth(2);
   KaonC1->SetLineColor(4);
   KaonC1->Scale(1. / KaonC1->Integral("width"));
+  KaonC1->GetYaxis()->SetRangeUser(0 , 6.8);
+  KaonC1->Draw("L");
 
   double_t meankaonc1, sigkaonc1;
   meankaonc1=KaonC1->GetMean();
   sigkaonc1=KaonC1->GetRMS();
 
   //KaonC2->Sumw2();
-  KaonC2->Draw("SAME");
+  KaonC2->Draw("SAMEL");
   KaonC2->SetLineWidth(2);
   KaonC2->SetLineColor(6);
   KaonC2->Scale(1. / KaonC2->Integral("width"));
@@ -127,7 +128,7 @@ auto legend3 = new TLegend(0.35,0.65,0.85,0.9);
   sigkaonc2=KaonC2->GetRMS();
 
   //KaonC3->Sumw2();
-  KaonC3->Draw("SAME");
+  KaonC3->Draw("SAMEL");
   KaonC3->SetLineWidth(2);
   KaonC3->SetLineColor(30);
   KaonC3->Scale(1. / KaonC3->Integral("width"));
@@ -186,6 +187,8 @@ auto legend3 = new TLegend(0.35,0.65,0.85,0.9);
   legend1->AddEntry(PionC2,TString::Format("#splitline{3 < p_{T} < 7 GeV/c}{Mean = %.2f RMS = %.2f} ",meanpionc2,sigpionc2),"l");
   legend1->AddEntry(PionC3,TString::Format("#splitline{7 < p_{T} < 12 GeV/c}{Mean = %.2f RMS = %.2f} ",meanpionc3,sigpionc3),"l");
   legend1->Draw();
+
+  c3->SaveAs("D0DaughterAngles.eps");
 
 //legend->AddEntry("f1","Function abs(#frac{sin(x)}{x})","l");
 //  TList	*l2 = (TList*)AliAnalysisTaskCharmHadronJets_histos
@@ -619,6 +622,8 @@ void DrawResults(TString fname1 = "", TString fname2 = "") {
 void ModeComparison(TString fname1 = "",TString fname2 = "")
 {
 
+SetStyle();
+
   TFile *f1 = new TFile(fname1.Data()); //mode1
   TFile *f2 = new TFile(fname2.Data()); //mode2
   TFile *f3 = new TFile("lcd0_pythia8_all.root");//pythia8 reference
@@ -674,11 +679,14 @@ void ModeComparison(TString fname1 = "",TString fname2 = "")
 //AnalysisResults_FastSim_pythia8_charm_ColorHard_1554883740.root
 //AnalysisResults_FastSim_pythia8_charm_ColorSoft_1554562536.root
 
-//ModeComparision("AnalysisResults_FastSim_pythia8_charm_ColorSoft_1554562536.root","AnalysisResults_FastSim_pythia8_charm_ColorHard_1554883740.root")
+//ModeComparison("AnalysisResults_FastSim_pythia8_charm_ColorSoft_1554562536.root","AnalysisResults_FastSim_pythia8_charm_ColorHard_1554883740.root")
 
+//MCZ("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorSoft_1555678227/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorSoft.root","/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorHard_1555665226/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorHard.root")
+//ModeComparison("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorSoft_1555678227/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorSoft.root","/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorHard_1555665226/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorHard.root")
 
 void MCZ(TString fname1 = "",TString fname2 = "")
 {
+  SetStyle();
   TFile *f1 = new TFile(fname1.Data()); //mode1
   TFile *f2 = new TFile(fname2.Data()); //mode2
   TFile *f3 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
@@ -765,6 +773,369 @@ void MCZ(TString fname1 = "",TString fname2 = "")
       legend->Draw();
 }
 
+//comparison pythia6 and pythia8 grid, for ratio of inclusive and in jets
+
+// /Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorHard_1555677760/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorHard.root
+// /Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorSoft_1554562536/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorSoft.root
+void Jet_Incl ()
+{
+  SetStyle();
+  // get file
+    TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1553872828/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root");
+    TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1554121250/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root");
+  // get lists containing histograms
+  TList	*l1 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l1_1 = (THashList*)l1->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l2 = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+  THashList	*l2_1 = (THashList*)l2->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+
+  TList	*l3 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+  THashList	*l3_1 = (THashList*)l3->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+  TList	*l4 = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+  THashList	*l4_1 = (THashList*)l4->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+
+
+  //p6 inc part
+    TH1F *fD0_pt1 = (TH1F*)l1_1->FindObject("fD0Pt");
+    TH1F *fLc_pt1 = (TH1F*)l1_1->FindObject("fLcPt");
+  //jet
+  TH1F	*fhD0JETpt1 = (TH1F*)l1_1->FindObject("fHistJetPt_SpeCandi");
+  TH1F	*fhLcJETpt1 = (TH1F*)l2_1->FindObject("fHistJetPt_SpeCandi");
+
+
+  //p8
+    TH1F *fD0_pt2 = (TH1F*)l3_1->FindObject("fD0Pt");
+    TH1F *fLc_pt2 = (TH1F*)l3_1->FindObject("fLcPt");
+  //jet
+  TH1F	*fhD0JETpt2 = (TH1F*)l3_1->FindObject("fHistJetPt_SpeCandi");
+  TH1F	*fhLcJETpt2 = (TH1F*)l4_1->FindObject("fHistJetPt_SpeCandi");
+
+  TCanvas *c2 = new TCanvas("c2","c2",800,600);
+  c2->Divide(1,1);
+  gStyle->SetOptStat(0);
+  auto legend = new TLegend(0.1,0.7,0.48,0.9);
+
+  c2->cd(1);
+  fLc_pt1->Divide(fD0_pt1);
+  fLc_pt1->Draw("");//C
+
+  fLc_pt2->Divide(fD0_pt2);
+  fLc_pt2->Draw("SAME");
+  fLc_pt2->SetLineColor(6);
+
+  fhLcJETpt1->Divide(fhD0JETpt1);
+  fhLcJETpt1->Draw("SAME");
+  fhLcJETpt1->SetLineColor(30);
+
+  fhLcJETpt2->Divide(fhD0JETpt2);
+  fhLcJETpt2->Draw("SAME");
+  fhLcJETpt2->SetLineColor(36);
+
+  legend->AddEntry(fLc_pt1," pythia 6 charm inclusive ratio ","l");
+  legend->AddEntry(fLc_pt2," pythia 8 charm inclusive ratio ","l");
+  legend->AddEntry(fhLcJETpt1," pythia 6 charm in jets ratio ","l");
+  legend->AddEntry(fhLcJETpt2," pythia 8 charm in jets ratio ","l");
+
+  legend->Draw();
+
+}
+
+void analysis1(TString fname1 = "",TString fname2 = "",TString fname3 = "",TString fname4 = "")
+
+{
+
+SetStyle();
+
+// get files
+
+TFile *f1 = new TFile(fname1.Data());
+TFile *f2 = new TFile(fname2.Data());
+TFile *f3 = new TFile(fname3.Data());
+TFile *f4 = new TFile(fname4.Data());
+//TFile *f1 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_155"); //pythia6 charm
+//TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_155"); // pythia8 charm
+//TFile *f3 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorHard_1555677760/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorHard.root"); // pythia8 color reconnection Hard
+//TFile *f4 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorSoft_1555678227/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorSoft.root"); // pythia8 color reconnection soft
+
+// get list containing histograms
+
+//f1
+TList	*l1_1_ = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l1_1 = (THashList*)l1_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l1_2_ = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l1_2 = (THashList*)l1_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+//f2
+TList	*l2_1_ = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l2_1 = (THashList*)l2_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l2_2_ = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l2_2 = (THashList*)l2_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+//f3
+TList	*l3_1_ = (TList*)f3->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l3_1 = (THashList*)l3_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l3_2_ = (TList*)f3->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l3_2 = (THashList*)l3_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+//f4
+TList	*l4_1_ = (TList*)f4->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l4_1 = (THashList*)l4_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l4_2_ = (TList*)f4->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l4_2 = (THashList*)l4_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+
+// get necessary histos for f1
+
+//D0 related histos
+  TH2F *LJ_D0_DPhEta_p6 = (TH2F*)l1_1->FindObject("fLeadingJet_SpCand_DEta_DPhi"); // the Deta and Dphi between LJ and sp candidate
+  TH2F *LJ_D0_pt_jet_p6 = (TH2F*)l1_1->FindObject("LJ_SpCand_pt_inJet"); // sp particles found in jets
+  TH2F *LJ_D0_pt_ue_p6 = (TH2F*)l1_1->FindObject("LJ_SpCand_pt_UE");  // sp particles found in U.E
+//Lc related histos
+  TH2F *LJ_Lc_DPhEta_p6 = (TH2F*)l1_2->FindObject("fLeadingJet_SpCand_DEta_DPhi");
+  TH2F *LJ_Lc_pt_jet_p6 = (TH2F*)l1_2->FindObject("LJ_SpCand_pt_inJet");
+  TH2F *LJ_Lc_pt_ue_p6 = (TH2F*)l1_2->FindObject("LJ_SpCand_pt_UE");
+
+// get necessary histos for f2
+
+//D0 related histos
+  TH2F *LJ_D0_DPhEta_p8 = (TH2F*)l2_1->FindObject("fLeadingJet_SpCand_DEta_DPhi"); // the Deta and Dphi between LJ and sp candidate
+  TH2F *LJ_D0_pt_jet_p8 = (TH2F*)l2_1->FindObject("LJ_SpCand_pt_inJet"); // sp particles found in jets
+  TH2F *LJ_D0_pt_ue_p8 = (TH2F*)l2_1->FindObject("LJ_SpCand_pt_UE");  // sp particles found in U.E
+//Lc related histos
+  TH2F *LJ_Lc_DPhEta_p8 = (TH2F*)l2_2->FindObject("fLeadingJet_SpCand_DEta_DPhi");
+  TH2F *LJ_Lc_pt_jet_p8 = (TH2F*)l2_2->FindObject("LJ_SpCand_pt_inJet");
+  TH2F *LJ_Lc_pt_ue_p8 = (TH2F*)l2_2->FindObject("LJ_SpCand_pt_UE");
+
+// get necessary histos for f3
+
+//D0 related histos
+  TH2F *LJ_D0_DPhEta_p8ColorHard = (TH2F*)l3_1->FindObject("fLeadingJet_SpCand_DEta_DPhi"); // the Deta and Dphi between LJ and sp candidate
+  TH2F *LJ_D0_pt_jet_p8ColorHard = (TH2F*)l3_1->FindObject("LJ_SpCand_pt_inJet"); // sp particles found in jets
+  TH2F *LJ_D0_pt_ue_p8ColorHard = (TH2F*)l3_1->FindObject("LJ_SpCand_pt_UE");  // sp particles found in U.E
+//Lc related histos
+  TH2F *LJ_Lc_DPhEta_p8ColorHard = (TH2F*)l3_2->FindObject("fLeadingJet_SpCand_DEta_DPhi");
+  TH2F *LJ_Lc_pt_jet_p8ColorHard = (TH2F*)l3_2->FindObject("LJ_SpCand_pt_inJet");
+  TH2F *LJ_Lc_pt_ue_p8ColorHard = (TH2F*)l3_2->FindObject("LJ_SpCand_pt_UE");
+
+// get necessary histos for f4
+
+//D0 related histos
+  TH2F *LJ_D0_DPhEta_p8ColorSoft = (TH2F*)l4_1->FindObject("fLeadingJet_SpCand_DEta_DPhi"); // the Deta and Dphi between LJ and sp candidate
+  TH2F *LJ_D0_pt_jet_p8ColorSoft = (TH2F*)l4_1->FindObject("LJ_SpCand_pt_inJet"); // sp particles found in jets
+  TH2F *LJ_D0_pt_ue_p8ColorSoft = (TH2F*)l4_1->FindObject("LJ_SpCand_pt_UE");  // sp particles found in U.E
+//Lc related histos
+  TH2F *LJ_Lc_DPhEta_p8ColorSoft = (TH2F*)l4_2->FindObject("fLeadingJet_SpCand_DEta_DPhi");
+  TH2F *LJ_Lc_pt_jet_p8ColorSoft = (TH2F*)l4_2->FindObject("LJ_SpCand_pt_inJet");
+  TH2F *LJ_Lc_pt_ue_p8ColorSoft = (TH2F*)l4_2->FindObject("LJ_SpCand_pt_UE");
+
+
+TCanvas *c1 = new TCanvas("c1","c1",800,600);
+c1->Divide(2,2);
+auto legend1 = new TLegend(0.1,0.7,0.48,0.9);
+auto legend2 = new TLegend(0.1,0.7,0.48,0.9);
+auto legend3 = new TLegend(0.1,0.7,0.48,0.9);
+auto legend4 = new TLegend(0.1,0.7,0.48,0.9);
+
+// first canvas is to plot the 2D (Deta and Dphi) Lc/D0 ratio for each f.
+c1->cd(1);
+LJ_Lc_DPhEta_p6->Divide(LJ_D0_DPhEta_p6);
+LJ_Lc_DPhEta_p6->Draw("");
+legend1->AddEntry(LJ_Lc_DPhEta_p6,"pythia 6","l");
+legend1->Draw();
+c1->cd(2);
+LJ_Lc_DPhEta_p8->Divide(LJ_D0_DPhEta_p8);
+LJ_Lc_DPhEta_p8->Draw("");
+LJ_Lc_DPhEta_p8->SetLineColor(36);
+legend2->AddEntry(LJ_Lc_DPhEta_p8,"pythia 8","l");
+legend2->Draw();
+c1->cd(3);
+LJ_Lc_DPhEta_p8ColorHard->Divide(LJ_D0_DPhEta_p8ColorHard);
+LJ_Lc_DPhEta_p8ColorHard->Draw("");
+LJ_Lc_DPhEta_p8ColorHard->SetLineColor(30);
+legend3->AddEntry(LJ_Lc_DPhEta_p8ColorHard,"pythia 8 color hard mode 1","l");
+legend3->Draw();
+c1->cd(4);
+LJ_Lc_DPhEta_p8ColorSoft->Divide(LJ_D0_DPhEta_p8ColorSoft);
+LJ_Lc_DPhEta_p8ColorSoft->Draw("");
+LJ_Lc_DPhEta_p8ColorSoft->SetLineColor(6);
+legend4->AddEntry(LJ_Lc_DPhEta_p8ColorSoft,"pythia 8 color soft mode 1","l");
+legend4->Draw();
+
+
+TCanvas *c2 = new TCanvas("c2","c2",800,600);
+c2->Divide(2,1);
+auto legend1_ = new TLegend(0.1,0.7,0.48,0.9);
+auto legend2_ = new TLegend(0.1,0.7,0.48,0.9);
+
+//Plot on the same 1canva the UE ratio for different modes (fs), general ( should put a cond of LJ_pt>10GeV/c)
+//Plot on the same 2canva the JETS ratio for different modes (fs), general ( should also later put a cond of LJ_pt>10GeV/c)
+
+//UE projections for D0, different modes
+TH1D* Proj_D0Pt_UE_p6 = LJ_D0_pt_ue_p6->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_D0Pt_UE_p8 = LJ_D0_pt_ue_p8->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_D0Pt_UE_p8ColorHard = LJ_D0_pt_ue_p8ColorHard->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_D0Pt_UE_p8ColorSoft = LJ_D0_pt_ue_p8ColorSoft->ProjectionY("_py",10,-1,"d");
+//UE Lc projections for diff modes
+TH1D* Proj_LcPt_UE_p6 = LJ_Lc_pt_ue_p6->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_LcPt_UE_p8 = LJ_Lc_pt_ue_p8->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_LcPt_UE_p8ColorHard = LJ_Lc_pt_ue_p8ColorHard->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_LcPt_UE_p8ColorSoft = LJ_Lc_pt_ue_p8ColorSoft->ProjectionY("_py",10,-1,"d");
+
+//in jets projections for D0, different modes
+TH1D* Proj_D0Pt_jet_p6 = LJ_D0_pt_jet_p6->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_D0Pt_jet_p8 = LJ_D0_pt_jet_p8->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_D0Pt_jet_p8ColorHard = LJ_D0_pt_jet_p8ColorHard->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_D0Pt_jet_p8ColorSoft = LJ_D0_pt_jet_p8ColorSoft->ProjectionY("_py",10,-1,"d");
+//in jets Lc projections for diff modes
+TH1D* Proj_LcPt_jet_p6 = LJ_Lc_pt_jet_p6->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_LcPt_jet_p8 = LJ_Lc_pt_jet_p8->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_LcPt_jet_p8ColorHard = LJ_Lc_pt_jet_p8ColorHard->ProjectionY("_py",10,-1,"d");
+TH1D* Proj_LcPt_jet_p8ColorSoft = LJ_Lc_pt_jet_p8ColorSoft->ProjectionY("_py",10,-1,"d");
+
+//the UE ratio
+c2->cd(1);
+Proj_LcPt_UE_p6->Divide(Proj_D0Pt_UE_p6);
+Proj_LcPt_UE_p6->Draw();
+
+Proj_LcPt_UE_p8->Divide(Proj_D0Pt_UE_p8);
+Proj_LcPt_UE_p8->Draw("SAME");
+Proj_LcPt_UE_p8->SetLineColor(36);
+
+Proj_LcPt_UE_p8ColorHard->Divide(Proj_D0Pt_UE_p8ColorHard);
+Proj_LcPt_UE_p8ColorHard->Draw("SAME");
+Proj_LcPt_UE_p8ColorHard->SetLineColor(30);
+
+Proj_LcPt_UE_p8ColorSoft->Divide(Proj_D0Pt_UE_p8ColorSoft);
+Proj_LcPt_UE_p8ColorSoft->Draw("SAME");
+Proj_LcPt_UE_p8ColorSoft->SetLineColor(6);
+
+legend1_->AddEntry(Proj_LcPt_UE_p6,"pythia 6","l");
+Legend1_->AddEntry(Proj_LcPt_UE_p8,"pythia 8","l");
+Legend1_->AddEntry(Proj_LcPt_UE_p8ColorHard,"pythia 8 color hard mode 1","l");
+Legend1_->AddEntry(Proj_LcPt_UE_p8ColorSoft,"pythia 8 color soft mode 1","l");
+legend1_->Draw();
+
+//the in jets ratio
+c2->cd(2);
+Proj_LcPt_jet_p6->Divide(Proj_D0Pt_jet_p6);
+Proj_LcPt_jet_p6->Draw();
+
+Proj_LcPt_jet_p8->Divide(Proj_D0Pt_jet_p8);
+Proj_LcPt_jet_p8->Draw("SAME");
+Proj_LcPt_jet_p8->SetLineColor(36);
+
+Proj_LcPt_jet_p8ColorHard->Divide(Proj_D0Pt_jet_p8ColorHard);
+Proj_LcPt_jet_p8ColorHard->Draw("SAME");
+Proj_LcPt_jet_p8ColorHard->SetLineColor(30);
+
+Proj_LcPt_jet_p8ColorSoft->Divide(Proj_D0Pt_jet_p8ColorSoft);
+Proj_LcPt_jet_p8ColorSoft->Draw("SAME");
+Proj_LcPt_jet_p8ColorSoft->SetLineColor(6);
+
+legend2_->AddEntry(Proj_LcPt_jet_p6,"pythia 6","l");
+Legend2_->AddEntry(Proj_LcPt_jet_p8,"pythia 8","l");
+Legend2_->AddEntry(Proj_LcPt_jet_p8ColorHard,"pythia 8 color hard mode 1","l");
+Legend2_->AddEntry(Proj_LcPt_jet_p8ColorSoft,"pythia 8 color soft mode 1","l");
+legend2_->Draw();
+
+
+TCanvas *c3 = new TCanvas("c3","c3",1000,800);
+c3->Divide(4,1);
+auto legend_1 = new TLegend(0.1,0.7,0.48,0.9); //p6
+auto legend_2 = new TLegend(0.1,0.7,0.48,0.9); //p8
+auto legend_3 = new TLegend(0.1,0.7,0.48,0.9); //p8Color Hard
+auto legend_4 = new TLegend(0.1,0.7,0.48,0.9); //p8 color soft
+
+//p6 inc part
+  TH1F *D0_pt_p6 = (TH1F*)l1_1->FindObject("fD0Pt");
+  TH1F *Lc_pt_p6 = (TH1F*)l1_1->FindObject("fLcPt");
+//p8 incl part
+  TH1F *D0_pt_p8 = (TH1F*)l2_1->FindObject("fD0Pt");
+  TH1F *Lc_pt_p8 = (TH1F*)l2_1->FindObject("fLcPt");
+//p8 color hard incl part
+  TH1F *D0_pt_p8ColorHard = (TH1F*)l3_1->FindObject("fD0Pt");
+  TH1F *Lc_pt_p8ColorHard = (TH1F*)l3_1->FindObject("fLcPt");
+//p8 color soft incl part
+  TH1F *D0_pt_p8ColorSoft = (TH1F*)l4_1->FindObject("fD0Pt");
+  TH1F *Lc_pt_p8ColorSoft = (TH1F*)l4_1->FindObject("fLcPt");
+
+// plot UE,IN JETS and inclusive ratio on 1 canva, for 1 mode a canva. (general. Should add a cut too on LJ_pt )
+c3->cd(1); //p6
+//ue
+Proj_LcPt_UE_p6->Divide(Proj_D0Pt_UE_p6);
+Proj_LcPt_UE_p6->Draw();
+//injet
+Proj_LcPt_jet_p6->Divide(Proj_D0Pt_jet_p6);
+Proj_LcPt_jet_p6->Draw("SAME");
+Proj_LcPt_jet_p6->SetLineColor(6);
+//incl part
+Lc_pt_p6->Divide(D0_pt_p6);
+Lc_pt_p6->Draw("SAME");
+Lc_pt_p6->SetLineColor(36);
+
+legend_1->AddEntry(Proj_LcPt_UE_p6,"UE","l");
+legend_1->AddEntry(Proj_LcPt_jet_p6,"JE","l");
+legend_1->AddEntry(Lc_pt_p6,"Incl","l");
+legend_1->Draw();
+
+c3->cd(2);//p8
+//ue
+Proj_LcPt_UE_p8->Divide(Proj_D0Pt_UE_p8);
+Proj_LcPt_UE_p8->Draw();
+//injet
+Proj_LcPt_jet_p8->Divide(Proj_D0Pt_jet_p8);
+Proj_LcPt_jet_p8->Draw("SAME");
+Proj_LcPt_jet_p8->SetLineColor(6);
+//incl part
+Lc_pt_p8->Divide(D0_pt_p8);
+Lc_pt_p8->Draw("SAME");
+Lc_pt_p8->SetLineColor(36);
+
+legend_2->AddEntry(Proj_LcPt_UE_p8,"UE","l");
+legend_2->AddEntry(Proj_LcPt_jet_p8,"JE","l");
+legend_2->AddEntry(Lc_pt_p8,"Incl","l");
+legend_2->Draw();
+
+c3->cd(3);//hard
+//ue
+Proj_LcPt_UE_p8ColorHard->Divide(Proj_D0Pt_UE_p8ColorHard);
+Proj_LcPt_UE_p8ColorHard->Draw();
+//injet
+Proj_LcPt_jet_p8ColorHard->Divide(Proj_D0Pt_jet_p8ColorHard);
+Proj_LcPt_jet_p8ColorHard->Draw("SAME");
+Proj_LcPt_jet_p8ColorHard->SetLineColor(6);
+//incl part
+Lc_pt_p8ColorHard->Divide(D0_pt_p8ColorHard);
+Lc_pt_p8ColorHard->Draw("SAME");
+Lc_pt_p8ColorHard->SetLineColor(36);
+
+legend_3->AddEntry(Proj_LcPt_UE_p8ColorHard,"UE","l");
+legend_3->AddEntry(Proj_LcPt_jet_p8ColorHard,"JE","l");
+legend_3->AddEntry(Lc_pt_p8ColorHard,"Incl","l");
+legend_3->Draw();
+
+c3->cd(4);//soft
+//ue
+Proj_LcPt_UE_p8ColorSoft->Divide(Proj_D0Pt_UE_p8ColorSoft);
+Proj_LcPt_UE_p8ColorSoft->Draw();
+//injet
+Proj_LcPt_jet_p8ColorSoft->Divide(Proj_D0Pt_jet_p8ColorSoft);
+Proj_LcPt_jet_p8ColorSoft->Draw("SAME");
+Proj_LcPt_jet_p8ColorSoft->SetLineColor(6);
+//incl part
+Lc_pt_p8ColorSoft->Divide(D0_pt_p8ColorSoft);
+Lc_pt_p8ColorSoft->Draw("SAME");
+Lc_pt_p8ColorSoft->SetLineColor(36);
+
+legend_4->AddEntry(Proj_LcPt_UE_p8ColorSoft,"UE","l");
+legend_4->AddEntry(Proj_LcPt_jet_p8ColorSoft,"JE","l");
+legend_4->AddEntry(Lc_pt_p8ColorSoft,"Incl","l");
+legend_4->Draw();
+
+}
+
 void SetStyle() {
   cout << "Setting style!" << endl;
 
@@ -811,7 +1182,7 @@ void SetStyle() {
 
 
 void SetStyleHisto( TH1 *h){
-  
+
   //h->SetLineColor(kBlack);
   //h->SetLineWidth(2);
   //h->GetYaxis()->SetLabelFont(42);
