@@ -1537,6 +1537,152 @@ void analysisresults ()
   analysis3();
 }
 
+//Calculation of signal contained in JET and UE %
+void analysis4()
+{
+  
+TFile *f1 = new TFile("/Users/sadek/analysis/alice-fast-simulation/GridOutput/FastSim_pythia6_charm_1556006398/stage_1/output/001/AnalysisResults_FastSim_pythia6_charm.root"); //pythia6 charm without any color reconnection to test and compare
+TFile *f2 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_1556006743/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm.root"); // pythia8 charm without any color reconnection test and to compare
+TFile *f3 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorHard_1555677760/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorHard.root"); // pythia8 color reconnection Hard mode 1
+TFile *f4 = new TFile("/Users/sadek/Analysis/alice-fast-simulation/GridOutput/FastSim_pythia8_charm_ColorSoft_1555678227/stage_1/output/001/AnalysisResults_FastSim_pythia8_charm_ColorSoft.root"); // pythia8 color reconnection soft mode 1
+
+//f1
+TList	*l1_1_ = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l1_1 = (THashList*)l1_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l1_2_ = (TList*)f1->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l1_2 = (THashList*)l1_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+//f2
+TList	*l2_1_ = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l2_1 = (THashList*)l2_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l2_2_ = (TList*)f2->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l2_2 = (THashList*)l2_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+//f3
+TList	*l3_1_ = (TList*)f3->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l3_1 = (THashList*)l3_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l3_2_ = (TList*)f3->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l3_2 = (THashList*)l3_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+//f4
+TList	*l4_1_ = (TList*)f4->Get("AliAnalysisTaskCharmHadronJets_D0_histos");
+THashList	*l4_1 = (THashList*)l4_1_->FindObject("histosAliAnalysisTaskCharmHadronJets_D0");
+
+TList	*l4_2_ = (TList*)f4->Get("AliAnalysisTaskCharmHadronJets_Lc_histos");
+THashList	*l4_2 = (THashList*)l4_2_->FindObject("histosAliAnalysisTaskCharmHadronJets_Lc");
+
+//f1
+  //D0 related histos
+    TH1F *LJ_D0_rp6 = (TH1F*)l1_1->FindObject("fLeadingJet_SpCand_R"); // sp particles found in jets
+    TH1F *LJ_D0_phip6 = (TH1F*)l1_1->FindObject("fLeadingJet_SpCand_DPhi");  // sp particles found in U.E
+  //Lc related histos
+    TH1F *LJ_Lc_rp6 = (TH1F*)l1_2->FindObject("fLeadingJet_SpCand_R");
+    TH1F *LJ_Lc_phip6 = (TH1F*)l1_2->FindObject("fLeadingJet_SpCand_DPhi");
+
+//f2
+  //D0 related histos
+    TH1F *LJ_D0_rp8 = (TH1F*)l2_1->FindObject("fLeadingJet_SpCand_R"); // sp particles found in jets
+    TH1F *LJ_D0_phip8 = (TH1F*)l2_1->FindObject("fLeadingJet_SpCand_DPhi");  // sp particles found in U.E
+  //Lc related histos
+    TH1F *LJ_Lc_rp8 = (TH1F*)l2_2->FindObject("fLeadingJet_SpCand_R");
+    TH1F *LJ_Lc_phip8 = (TH1F*)l2_2->FindObject("fLeadingJet_SpCand_DPhi");
+
+  // f3
+  //D0 related histos
+    TH1F *LJ_D0_rp8ch = (TH1F*)l3_1->FindObject("fLeadingJet_SpCand_R"); // sp particles found in jets
+    TH1F *LJ_D0_phip8ch = (TH1F*)l3_1->FindObject("fLeadingJet_SpCand_DPhi");  // sp particles found in U.E
+  //Lc related histos
+    TH1F *LJ_Lc_rp8ch = (TH1F*)l3_2->FindObject("fLeadingJet_SpCand_R");
+    TH1F *LJ_Lc_phip8ch = (TH1F*)l3_2->FindObject("fLeadingJet_SpCand_DPhi");
+//f4
+  //D0 related histos
+    TH1F *LJ_D0_rp8cs = (TH1F*)l4_1->FindObject("fLeadingJet_SpCand_R"); // sp particles found in jets
+    TH1F *LJ_D0_phip8cs = (TH1F*)l4_1->FindObject("fLeadingJet_SpCand_DPhi");  // sp particles found in U.E
+  //Lc related histos
+    TH1F *LJ_Lc_rp8cs = (TH1F*)l4_2->FindObject("fLeadingJet_SpCand_R");
+    TH1F *LJ_Lc_phip8cs = (TH1F*)l4_2->FindObject("fLeadingJet_SpCand_DPhi");
+
+//signal in jet
+  Int_t rCutp6D0 , rAllp6D0, rCutp6Lc, rAllp6Lc;
+  Int_t rCutp8D0, rAllp8D0, rCutp8Lc, rAllp8Lc;
+  Int_t rCutp8chD0, rAllp8chD0, rCutp8chLc, rAllp8chLc;
+  Int_t rCutp8csD0, rAllp8csD0,rCutp8csLc, rAllp8csLc;
+
+//D0
+  rAllp6D0 = LJ_D0_rp6->Integral(LJ_D0_rp6->FindBin(0),LJ_D0_rp6->FindBin(7));
+  rCutp6D0 = LJ_D0_rp6->Integral(LJ_D0_rp6->FindBin(0),LJ_D0_rp6->FindBin(0.4));
+
+  rAllp8D0 = LJ_D0_rp8->Integral(LJ_D0_rp8->FindBin(0),LJ_D0_rp8->FindBin(7));
+  rCutp8D0 = LJ_D0_rp8->Integral(LJ_D0_rp8->FindBin(0),LJ_D0_rp8->FindBin(0.4));
+
+  rAllp8chD0 = LJ_D0_rp8ch->Integral(LJ_D0_rp8ch->FindBin(0),LJ_D0_rp8ch->FindBin(7));
+  rCutp8chD0 = LJ_D0_rp8ch->Integral(LJ_D0_rp8ch->FindBin(0),LJ_D0_rp8ch->FindBin(0.4));
+
+  rAllp8csD0 = LJ_D0_rp8cs->Integral(LJ_D0_rp8cs->FindBin(0),LJ_D0_rp8cs->FindBin(7));
+  rCutp8csD0 = LJ_D0_rp8cs->Integral(LJ_D0_rp8cs->FindBin(0),LJ_D0_rp8cs->FindBin(0.4));
+
+  //Lc
+    rAllp6Lc = LJ_Lc_rp6->Integral(LJ_Lc_rp6->FindBin(0),LJ_Lc_rp6->FindBin(7));
+    rCutp6Lc = LJ_Lc_rp6->Integral(LJ_Lc_rp6->FindBin(0),LJ_Lc_rp6->FindBin(0.4));
+
+    rAllp8Lc = LJ_Lc_rp8->Integral(LJ_Lc_rp8->FindBin(0),LJ_Lc_rp8->FindBin(7));
+    rCutp8Lc = LJ_Lc_rp8->Integral(LJ_Lc_rp8->FindBin(0),LJ_Lc_rp8->FindBin(0.4));
+
+    rAllp8chLc = LJ_Lc_rp8ch->Integral(LJ_Lc_rp8ch->FindBin(0),LJ_Lc_rp8ch->FindBin(7));
+    rCutp8chLc = LJ_Lc_rp8ch->Integral(LJ_Lc_rp8ch->FindBin(0),LJ_Lc_rp8ch->FindBin(0.4));
+
+    rAllp8csLc = LJ_Lc_rp8cs->Integral(LJ_Lc_rp8cs->FindBin(0),LJ_Lc_rp8cs->FindBin(7));
+    rCutp8csLc = LJ_Lc_rp8cs->Integral(LJ_Lc_rp8cs->FindBin(0),LJ_Lc_rp8cs->FindBin(0.4));
+
+//signal in UE :
+Int_t phiCutp6D0 , phiAllp6D0, phiCutp6Lc, phiAllp6Lc;
+Int_t phiCutp8D0, phiAllp8D0, phiCutp8Lc, phiAllp8Lc;
+Int_t phiCutp8chD0, phiAllp8chD0, phiCutp8chLc, phiAllp8chLc;
+Int_t phiCutp8csD0, phiAllp8csD0,phiCutp8csLc, phiAllp8csLc;
+
+//D0
+phiAllp6D0 = LJ_D0_phip6->Integral(LJ_D0_phip6->FindBin(-7),LJ_D0_phip6->FindBin(7));
+phiCutp6D0 = LJ_D0_phip6->Integral(LJ_D0_phip6->FindBin(TMath::Pi()/4),LJ_D0_phip6->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp6D0=2*phiCutp6D0;
+
+phiAllp8D0 = LJ_D0_phip8->Integral(LJ_D0_phip8->FindBin(-7),LJ_D0_phip8->FindBin(7));
+phiCutp8D0 = LJ_D0_phip8->Integral(LJ_D0_phip8->FindBin(TMath::Pi()/4),LJ_D0_phip8->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp8D0=2*phiCutp8D0;
+
+phiAllp8chD0 = LJ_D0_phip8ch->Integral(LJ_D0_phip8ch->FindBin(-7),LJ_D0_phip8ch->FindBin(7));
+phiCutp8chD0 = LJ_D0_phip8ch->Integral(LJ_D0_phip8ch->FindBin(TMath::Pi()/4),LJ_D0_phip8ch->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp8chD0=2*phiCutp8chD0;
+
+phiAllp8csD0 = LJ_D0_phip8cs->Integral(LJ_D0_phip8cs->FindBin(-7),LJ_D0_phip8cs->FindBin(7));
+phiCutp8csD0 = LJ_D0_phip8cs->Integral(LJ_D0_phip8cs->FindBin(TMath::Pi()/4),LJ_D0_phip8cs->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp8csD0=2*phiCutp8csD0;
+
+//Lc
+phiAllp6Lc = LJ_Lc_phip6->Integral(LJ_Lc_phip6->FindBin(-7),LJ_Lc_phip6->FindBin(7));
+phiCutp6Lc = LJ_Lc_phip6->Integral(LJ_Lc_phip6->FindBin(TMath::Pi()/4),LJ_Lc_phip6->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp6Lc=2*phiCutp6Lc;
+
+phiAllp8Lc = LJ_Lc_phip8->Integral(LJ_Lc_phip8->FindBin(-7),LJ_Lc_phip8->FindBin(7));
+phiCutp8Lc = LJ_Lc_phip8->Integral(LJ_Lc_phip8->FindBin(TMath::Pi()/4),LJ_Lc_phip8->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp8Lc=2*phiCutp8Lc;
+
+phiAllp8chLc = LJ_Lc_phip8ch->Integral(LJ_Lc_phip8ch->FindBin(-7),LJ_Lc_phip8ch->FindBin(7));
+phiCutp8chLc = LJ_Lc_phip8ch->Integral(LJ_Lc_phip8ch->FindBin(TMath::Pi()/4),LJ_Lc_phip8ch->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp8chLc=2*phiCutp8chLc;
+
+phiAllp8csLc = LJ_Lc_phip8cs->Integral(LJ_Lc_phip8cs->FindBin(-7),LJ_Lc_phip8cs->FindBin(7));
+phiCutp8csLc = LJ_Lc_phip8cs->Integral(LJ_Lc_phip8cs->FindBin(TMath::Pi()/4),LJ_Lc_phip8cs->FindBin(TMath::Pi()*3/4)); // sym.
+phiCutp8csLc=2*phiCutp8csLc;
+
+
+printf("PYTHIA 6 - D0 signal IN JET: %.2f %% \n IN UE: %.2f %% \n Lc signal IN JET: %.2f %% \n IN UE: %.2f %% \n ",100.0*rCutp6D0/rAllp6D0,100.0*phiCutp6D0/phiAllp6D0,100.0*rCutp6Lc/rAllp6Lc,100.0*phiCutp6Lc/phiAllp6Lc);
+printf("PYTHIA 8 - D0 signal IN JET: %.2f %% \n IN UE: %.2f %% \n Lc signal IN JET: %.2f %% \n IN UE: %.2f %% \n ",100.0*rCutp8D0/rAllp8D0,100.0*phiCutp8D0/phiAllp8D0,100.0*rCutp8Lc/rAllp8Lc,100.0*phiCutp8Lc/phiAllp8Lc);
+printf("PYTHIA 8 Color Hard - D0 signal IN JET: %.2f %% \n IN UE: %.2f %% \n Lc signal IN JET: %.2f %% \n IN UE: %.2f %% \n ",100.0*rCutp8chD0/rAllp8chD0,100.0*phiCutp8chD0/phiAllp8chD0,100.0*rCutp8chLc/rAllp8chLc,100.0*phiCutp8chLc/phiAllp8chLc);
+printf("PYTHIA 8 Color Soft - D0 signal IN JET: %.2f %% \n IN UE: %.2f %% \n Lc signal IN JET: %.2f %% \n IN UE: %.2f %% \n ",100.0*rCutp8csD0/rAllp8csD0,100.0*phiCutp8csD0/phiAllp8csD0,100.0*rCutp8csLc/rAllp8csLc,100.0*phiCutp8csLc/phiAllp8csLc);
+
+}
+
+
 void SetStyle() {
   cout << "Setting style!" << endl;
 
