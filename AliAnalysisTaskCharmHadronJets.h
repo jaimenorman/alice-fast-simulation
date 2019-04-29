@@ -95,6 +95,8 @@ class AliAnalysisTaskCharmHadronJets : public AliAnalysisTaskEmcalJetLight
   void SetJetR(Double_t jetR ) { fJetR = jetR;} 
 
   void SetCandidatePDG(UInt_t pdg) {fCandidatePDG = pdg;}
+  void SetRejectedOrigin(UInt_t origin) {fRejectedOrigin = origin;}
+  void SetAcceptedDecay(UInt_t decay) {fAcceptedDecay = decay;}
 
   virtual void         UserCreateOutputObjects();
   virtual void         ExecOnce();

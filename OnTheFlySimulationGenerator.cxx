@@ -327,6 +327,8 @@ void OnTheFlySimulationGenerator::AddDJet(const char* file_name)
   pCharmHadronJetsTaskD0->SetApplyKinematicCuts(kTRUE);
   pCharmHadronJetsTaskD0->SetRejectISR(fRejectISR);
   pCharmHadronJetsTaskD0->SetCandidatePDG(421);
+  pCharmHadronJetsTaskD0->SetRejectedOrigin(0);
+  pCharmHadronJetsTaskD0->SetAcceptedDecay(0);
 
 
   AliAnalysisTaskCharmHadronJets* pCharmHadronJetsTaskLc = AliAnalysisTaskCharmHadronJets::AddTaskCharmHadronJets("usedefault", AliJetContainer::kChargedJet, AliJetContainer::antikt_algorithm, AliJetContainer::pt_scheme,0.4, 2, "Lc");
@@ -341,6 +343,8 @@ void OnTheFlySimulationGenerator::AddDJet(const char* file_name)
   pCharmHadronJetsTaskLc->SetApplyKinematicCuts(kTRUE);
   pCharmHadronJetsTaskLc->SetRejectISR(fRejectISR);
   pCharmHadronJetsTaskLc->SetCandidatePDG(4122);
+  pCharmHadronJetsTaskLc->SetRejectedOrigin(0);
+  pCharmHadronJetsTaskLc->SetAcceptedDecay(0);
 
 //try1 : 413
 

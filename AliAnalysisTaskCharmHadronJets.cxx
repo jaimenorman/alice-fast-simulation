@@ -78,7 +78,10 @@ AliAnalysisTaskCharmHadronJets::AliAnalysisTaskCharmHadronJets() :
   fJetR(0.4),
   fMCContainer(0),
   fAodEvent(0),
-  fFastJetWrapper(0)
+  fFastJetWrapper(0),
+  fCandidatePDG(0),
+  fRejectedOrigin(0),
+  fAcceptedDecay(0)
 {
   SetMakeGeneralHistograms(kTRUE);
 }
@@ -101,7 +104,10 @@ AliAnalysisTaskCharmHadronJets::AliAnalysisTaskCharmHadronJets(const char* name,
   fJetR(0.4),
   fMCContainer(0),
   fAodEvent(0),
-  fFastJetWrapper(0)
+  fFastJetWrapper(0),
+  fCandidatePDG(0),
+  fRejectedOrigin(0),
+  fAcceptedDecay(0)
 {
   SetMakeGeneralHistograms(kTRUE);
   for (Int_t i = 0; i < nOutputTrees; i++){
@@ -486,6 +492,8 @@ void AliAnalysisTaskCharmHadronJets::AddInputVectors(AliEmcalContainer* cont, In
   auto itcont = cont->all_momentum();
   for (AliEmcalIterableMomentumContainer::iterator it = itcont.begin(); it != itcont.end(); it++) {
     UInt_t rejectionReason = 0;
+//    AliAODMCParticle *part = (AliAODMCParticle*)it->second;
+ //   if(TMath::Abs(part->PdgCode())==fCandidatePDG) Printf("Add: found special particle");
     if (!cont->AcceptObject(it.current_index(), rejectionReason)) {
       if (rejectHist) rejectHist->Fill(AliEmcalContainer::GetRejectionReasonBitPosition(rejectionReason), it->first.Pt());
       continue;
@@ -497,6 +505,7 @@ void AliAnalysisTaskCharmHadronJets::AddInputVectors(AliEmcalContainer* cont, In
 //        continue;
 //      }
 //    }
+  // if(TMath::Abs(part->PdgCode())==fCandidatePDG) Printf("Add: add input vector of special particle");
     Int_t uid = offset >= 0 ? it.current_index() + offset: -it.current_index() - offset;
     fFastJetWrapper->AddInputVector(it->first.Px(), it->first.Py(), it->first.Pz(), it->first.E(), uid);
 
@@ -705,7 +714,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
 		 AliAODMCParticle* part1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
      if (!part1) {break;}
      moth=part1->GetPdgCode();
-     printf("The Mother Pdg = %i \n", moth);
+     //printf("The Mother Pdg = %i \n", moth);
 
      if (moth==-6||moth==-5||moth==-4||moth==-3||moth==-2||moth==-1||moth==0||moth==1||moth==2||moth==3||moth==4||moth==5||moth==6)
      {
