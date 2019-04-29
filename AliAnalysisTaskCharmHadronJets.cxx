@@ -178,11 +178,11 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname="fD0Pt";
   htitle= hname + ";#it{p}_{T,D0} (GeV/#it{c});counts";
-  fHistManager.CreateTH1(hname,htitle,100,0,12);
+  fHistManager.CreateTH1(hname,htitle,150,0,30);
 
   hname="fD0PtCut1";
-  htitle= hname + ";#it{p}_{T,D0} (GeV/#it{c});counts";
-  fHistManager.CreateTH1(hname,htitle,100,0,12);
+  htitle= hname + ";#it{p}_{T,D0} (GeV/#it{c}) ;multiplicity ;counts";
+  fHistManager.CreateTH2(hname,htitle,150,0,30,200,0.5,200.5);//to use for analysis
 
   hname="fD0PtCut2";
   htitle= hname + ";#it{p}_{T,D0} (GeV/#it{c});counts";
@@ -199,11 +199,11 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname="fLcPt";
   htitle= hname + ";#it{p}_{T,#Lambda_{C}} (GeV/#it{c});counts";
-  fHistManager.CreateTH1(hname,htitle,100,0,12);
+  fHistManager.CreateTH1(hname,htitle,150,0,30);
 
   hname="fLcPtCut1";
-  htitle= hname + ";#it{p}_{T,#Lambda_{C}} (GeV/#it{c});counts";
-  fHistManager.CreateTH1(hname,htitle,100,0,12);
+  htitle= hname + ";#it{p}_{T,#Lambda_{C}} (GeV/#it{c}) ;multiplicity ;counts";
+  fHistManager.CreateTH2(hname,htitle,150,0,30,200,0.5,200.5);
 
   hname="fLcPtCut2";
   htitle= hname + ";#it{p}_{T,#Lambda_{C}} (GeV/#it{c});counts";
@@ -401,35 +401,43 @@ void AliAnalysisTaskCharmHadronJets::UserCreateOutputObjects()
 
   hname = "fLeadingJet_SpCand_R";
   htitle = hname + ";#Delta R;counts";
-  fHistManager.CreateTH1(hname, htitle, 50, 0, 10.0); //1.0??
+  fHistManager.CreateTH2(hname, htitle, 50, 0, 10.0,150,0,30); //1.0??
 
   hname = "fLeadingJet_SpCand_DPhi";
-  htitle = hname + ";D#phi_ ;counts ";
-  fHistManager.CreateTH1(hname,htitle,150,-TMath::TwoPi(),TMath::TwoPi());
+  htitle = hname + ";D#phi ;counts ";
+  fHistManager.CreateTH2(hname,htitle,150,-TMath::TwoPi(),TMath::TwoPi(),150,0,30);
 
   hname = "fLeadingJet_SpCand_DPhi_cond";
-  htitle = hname + ";D#phi_ ;counts ";
+  htitle = hname + ";D#phi ;counts ";
   fHistManager.CreateTH1(hname,htitle,150,-TMath::TwoPi(),TMath::TwoPi());
 
   hname = "fLeadingJet_SpCand_DEta";
-  htitle = hname +";D#eta_ ;counts ";
+  htitle = hname +";D#eta ;counts ";
   fHistManager.CreateTH1(hname,htitle,50,-10,10);
 
   hname = "fLeadingJet_SpCand_DEta_DPhi";
-  htitle = hname + ";D#eta_  ;D#phi_ ;counts";
+  htitle = hname + ";D#eta  ;D#phi ;counts";
   fHistManager.CreateTH2(hname, htitle, 30, -1, 1, 30, 0,TMath::TwoPi());
+
+  hname = "fLeadingJet_SpCand_DEta_DPhi_LJ";//LJ
+  htitle = hname + ";D#eta  ;D#phi ;LJ pt ;counts";
+  fHistManager.CreateTH3(hname, htitle, 30, -1, 1, 30, 0,TMath::TwoPi(),150,0,30);
 
   hname = "SpCand_UE_Pt";
   htitle = hname + ";p_{T} (GeV/c) ;counts";
   fHistManager.CreateTH1(hname,htitle,45,5,50);
 
   hname = "LJ_SpCand_pt_inJet";
-  htitle = hname + ";p_{T,LJ} (GeV/c) ;p_{T,SpCand} (GeV/c) ;counts";
-  fHistManager.CreateTH2(hname,htitle,50,0,50,50,0,50);
+  htitle = hname + ";p_{T,LJ} (GeV/c) ;p_{T,SpCand} (GeV/c) ;multiplicity ;counts";
+  fHistManager.CreateTH3(hname,htitle,150,0,30,150,0,30,200,0.5,200.5);
 
   hname = "LJ_SpCand_pt_UE";
-  htitle = hname + ";p_{T,LJ} (GeV/c) ;p_{T,SpCand} (GeV/c) ;counts";
-  fHistManager.CreateTH2(hname,htitle,50,0,50,50,0,50);
+  htitle = hname + ";p_{T,LJ} (GeV/c) ;p_{T,SpCand} (GeV/c) ;multiplicity ;counts";
+  fHistManager.CreateTH3(hname,htitle,150,0,30,150,0,30,200,0.5,200.5);
+
+  hname = "multipl";
+  htitle = hname +";multiplicity ;counts ";
+  fHistManager.CreateTH1(hname,htitle,200,0.5,200.5);
 
   // TO DO - set other histograms
 
@@ -560,6 +568,21 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
   // particle loop - loop over all particles in MC container
   //
   auto itpart = fMCContainer->all_momentum();
+
+//multiplicity
+
+  Int_t nchargedpart=0;
+
+  for (auto part : itpart)
+  {
+  if(part.second->Eta()>1 || part.second->Eta()<-1) continue;
+   Short_t pcharge = part.second->Charge();
+   UInt_t Ndaugh = part.second->GetNDaughters();
+   if(Ndaugh==0) { if(pcharge != 0) {nchargedpart++; } }
+  }
+  fHistManager.FillTH1("multipl",nchargedpart);
+
+
   for(auto part : itpart) {
     // part is a type pair <AliTLorentzVector, AliAODMCParticle *>
     // where the first and second element can be accessed by
@@ -597,14 +620,14 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
     { fHistManager.FillTH1("fLcPt",part.second->Pt());
 	    fHistManager.FillTH1("fLcPhi",part.second->Phi());
 	    fHistManager.FillTH1("fLcEta",part.second->Eta());
-	    if ( eta < 1 && eta > -1 ) {fHistManager.FillTH1("fLcPtCut1",part.second->Pt());}
+	    if ( eta < 1 && eta > -1 ) {fHistManager.FillTH2("fLcPtCut1",part.second->Pt(),nchargedpart);}
                UInt_t idmother= part.second->GetMother();
                UInt_t moth;
                UInt_t k = 1;
         AliAODMCParticle* moth1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
         fHistManager.FillTH1("fMotherLc_pt", moth1->Pt());
 
-        UInt_t iddaughter=part.second->GetDaughterFirst();
+        UInt_t iddaughter=part.second->GetFirstDaughter();
         AliAODMCParticle* part2 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaughter);
         UInt_t daught=part2->GetPdgCode();
         fHistManager.FillTH1("fDaughterLc_pt", part2->Pt());
@@ -645,7 +668,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
          UInt_t Ndaught = part.second->GetNDaughters();
         // if we want all the N daughters.
          for (Int_t j = 0; j <= Ndaught; j++){
-           UInt_t iddaught = part.second->GetDaughterLabel(j);
+           UInt_t iddaught = part.second->GetDaughter(j);
            AliAODMCParticle* daught1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaught);
            UInt_t Pdgdaught1= daught1->GetPdgCode();
         //   printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
@@ -694,7 +717,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
    { fHistManager.FillTH1("fD0Pt",part.second->Pt());
      fHistManager.FillTH1("fD0Phi",part.second->Phi());
      fHistManager.FillTH1("fD0Eta",part.second->Eta());
-         if ( eta < 1 && eta > -1 ) {fHistManager.FillTH1("fD0PtCut1",part.second->Pt());}
+         if ( eta < 1 && eta > -1 ) {fHistManager.FillTH2("fD0PtCut1",part.second->Pt(),nchargedpart);}
 	 UInt_t idmother= part.second->GetMother();
 	 UInt_t moth;
 	 UInt_t k=1;
@@ -702,7 +725,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
    AliAODMCParticle* moth1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(idmother);
    fHistManager.FillTH1("fMotherD0_pt", moth1->Pt());
 
-   UInt_t iddaughter=part.second->GetDaughterFirst();
+   UInt_t iddaughter=part.second->GetFirstDaughter();
    AliAODMCParticle* part2 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaughter);
    UInt_t daught=part2->GetPdgCode();
    fHistManager.FillTH1("fDaughterD0_pt", part2->Pt());
@@ -748,7 +771,7 @@ void AliAnalysisTaskCharmHadronJets::RunParticleLevelAnalysis()
 // if we want all the N daughters.
    for (Int_t j = 0; j <= Ndaught; j++){
 
-     UInt_t iddaught = part.second->GetDaughterLabel(j);
+     UInt_t iddaught = part.second->GetDaughter(j);
      AliAODMCParticle* daught1 = (AliAODMCParticle*) fMCContainer->GetMCParticleWithLabel(iddaught);
      UInt_t Pdgdaught1= daught1->GetPdgCode();
     // printf("The daughter of generation %i is %i \n ",j,Pdgdaught1);
@@ -869,7 +892,6 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
 
 //particle loop
 
-//printf("The highestJetPt is %f \n",highestJetPt);
 
   for(auto part : itpart) {
   if ( TMath::Abs(part.second->PdgCode()) == fCandidatePDG) {
@@ -879,17 +901,19 @@ if (Pdgdaught1==211||Pdgdaught1==-211||Pdgdaught1==111)
     Double_t DPhi = (part.second->Phi() - highestJetPhi);
     Double_t R_SpCand = TMath::Sqrt(DEta*DEta+DPhi*DPhi);
   //  printf(">>> R is = %f \n ",R_SpCand);
-    fHistManager.FillTH1("fLeadingJet_SpCand_R", R_SpCand); //for all pt ranges.
-    fHistManager.FillTH1("fLeadingJet_SpCand_DPhi",DPhi);
+    fHistManager.FillTH1("fLeadingJet_SpCand_R", R_SpCand,highestJetPt); //for all pt ranges.
+    fHistManager.FillTH1("fLeadingJet_SpCand_DPhi",DPhi,highestJetPt);
     fHistManager.FillTH1("fLeadingJet_SpCand_DEta",DEta);
     fHistManager.FillTH2("fLeadingJet_SpCand_DEta_DPhi",DEta,DPhi);
+    fHistManager.FillTH3("fLeadingJet_SpCand_DEta_DPhi_LJ",DEta,DPhi,highestJetPt);
+
 
     DPhi=TMath::Abs(DPhi);
     if (DPhi<TMath::TwoPi() && DPhi>TMath::Pi()) {DPhi=DPhi-TMath::Pi();}
     fHistManager.FillTH1("fLeadingJet_SpCand_DPhi_cond",DPhi);
 
-    if (R_SpCand<=0.4) { fHistManager.FillTH2("LJ_SpCand_pt_inJet",highestJetPt,part.second->Pt());}
-    if ((TMath::Pi())/4 <= TMath::Abs(DPhi) && TMath::Abs(DPhi) <= (TMath::Pi())*3/4) { fHistManager.FillTH2("LJ_SpCand_pt_UE",highestJetPt,part.second->Pt()); }
+    if (R_SpCand<=0.4) { fHistManager.FillTH3("LJ_SpCand_pt_inJet",highestJetPt,part.second->Pt(),nchargedpart);}
+    if ((TMath::Pi())/4 <= TMath::Abs(DPhi) && TMath::Abs(DPhi) <= (TMath::Pi())*3/4) { fHistManager.FillTH3("LJ_SpCand_pt_UE",highestJetPt,part.second->Pt(),nchargedpart); }
     //UE events
     if ((TMath::Pi())/4 <= TMath::Abs(DPhi) && TMath::Abs(DPhi) <= (TMath::Pi())*3/4) { fHistManager.FillTH1("SpCand_UE_Pt",part.second->Pt()); }
 
@@ -951,7 +975,7 @@ void AliAnalysisTaskCharmHadronJets::FillPartonLevelHistograms()
 
     Bool_t lastInPartonShower = kTRUE;
     Bool_t hadronDaughter = kFALSE;
-    for (Int_t daughterIndex = part.second->GetDaughterFirst(); daughterIndex <= part.second->GetDaughterLast(); daughterIndex++){
+    for (Int_t daughterIndex = part.second->GetFirstDaughter(); daughterIndex <= part.second->GetLastDaughter(); daughterIndex++){
       if (daughterIndex < 0) {
         AliDebugStream(5) << "Could not find daughter index!" << std::endl;
         continue;
